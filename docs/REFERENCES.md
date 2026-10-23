@@ -93,6 +93,21 @@ All QEMU evidence links below use the existing immutable source snapshot `4fc49f
 
 P005 introduces no hardware address, proprietary asset or new third-party source dependency. Foundation selection does not complete the later license review, immutable build selection, CPU conformance suite or T8103 implementation.
 
+## P006 licensing evidence
+
+Reviewed 2026-10-23. The [licensing and redistribution policy](LICENSING.md) records the current source-only dependency review and the procedures required for future imports and binary releases. Its primary-evidence inventory also covers the declared development tools and CI actions. The [machine-readable inventory](licensing.json) classifies exact project paths, twelve external/reference component groups and seven reviewed declaration/build/runner inputs. This is not a transitive build SBOM or a license grant for referenced material.
+
+| Primary evidence | Review result |
+|---|---|
+| [QEMU LICENSE](https://github.com/qemu/qemu/blob/4fc49f46dc95d4a27de2509e7fceb2931e91faeb/LICENSE) and [COPYING](https://github.com/qemu/qemu/blob/4fc49f46dc95d4a27de2509e7fceb2931e91faeb/COPYING) | Separate whole-emulator GPLv2, file-specific terms, mixed TCG terms and firmware licenses. Future distribution needs the applicable notices and corresponding-source review. |
+| [Linux COPYING](https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/COPYING) and [file-license rules](https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/Documentation/process/license-rules.rst) | GPLv2-only kernel with the Linux syscall exception; copied files retain their own SPDX choices and notices. |
+| [Asahi documentation LICENSE](https://github.com/AsahiLinux/docs/blob/0d1f8917fa88745d62a4c05d802c4a7298c8616b/LICENSE) | CC BY 3.0; copied or adapted expressive material cannot silently inherit project MIT terms. |
+| [m1n1 README license section](https://github.com/AsahiLinux/m1n1/blob/7cde7d1a784d851ebfee5579fa363c38b14150c0/README.md) | Version-dependent licensing: MIT through 1.9.9, GPLv2-or-later from 2.0.0, plus separate embedded-component terms. This new pin records source review only; no m1n1 build is selected. |
+| [BusyBox license policy](https://busybox.net/license.html) | GPLv2-only combined distribution; future guest binaries need their exact source, configuration, component and notice review. |
+| [Asahi platform introduction](https://github.com/AsahiLinux/docs/blob/0d1f8917fa88745d62a4c05d802c4a7298c8616b/docs/platform/introduction.md), [Apple agreement index](https://www.apple.com/legal/sla/) and [example macOS agreement](https://www.apple.com/legal/sla/docs/macOSTahoe.pdf) | Public access to firmware is not redistribution permission. The project excludes Apple proprietary assets; actual applicable agreements and open-source exceptions must be distinguished. |
+
+The QEMU, Linux and Asahi evidence pins are unchanged from previous phases. All current source files remain project-authored text under the existing MIT grant; no third-party source, license text, executable, guest image or proprietary firmware is newly bundled. Primary-source links support the review and do not complete P017's immutable build pin, later guest preparation or a runtime gate.
+
 ## Other development references
 
 These are working references, not complete specifications. For each implemented register or device, record an exact upstream revision and independently verify behavior where possible.

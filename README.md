@@ -27,20 +27,22 @@ Cycle-accurate Firestorm simulation, fully functioning Apple AGX graphics, and u
 - [P003 Linux boot milestone](docs/LINUX_BOOT_MILESTONE.md) — explicit G4 prerequisites, reproducible serial-shell witness and evidence requirements; actual Linux boot remains future work.
 - [P004 exploratory scope](docs/EXPLORATORY_SCOPE.md) — explicit boundaries for timing, graphics and unmodified macOS; no runtime capability is established.
 - [P005 emulation foundation decision](docs/decisions/0001-qemu-tcg.md) — why full-system AArch64 QEMU TCG is selected, alternatives considered and limits that still require testing.
+- [P006 licensing boundaries](docs/LICENSING.md) — project MIT scope, external dependency review, future QEMU redistribution duties and excluded proprietary assets.
 - [Hardware reference register](hardware/t8103.json) — sourced addresses, uncertainty, and schema-validated data.
 - [Reference material](docs/REFERENCES.md) — authoritative upstream projects and publications.
 - [Local development](docs/DEVELOPMENT.md) — Windows/WSL2/Linux setup and current smoke tests.
 - [Contribution contract](AGENTS.md) — rules to keep changes measurable and reproducible.
 
-## Verify target, fidelity, Linux milestone and scope contracts
+## Verify target, fidelity, Linux milestone, scope and licensing contracts
 
-Validate the target declarations, fidelity definitions, Linux witness contract, exploratory scope and planning metadata with Python 3.11+ and a POSIX host shell:
+Validate the target declarations, fidelity definitions, Linux witness contract, exploratory scope, source licensing inventory and planning metadata with Python 3.11+, Git and a POSIX host shell:
 
 ```sh
 python3 tools/validate_target.py
 python3 tools/validate_fidelity.py
 python3 tools/validate_boot_milestone.py
 python3 tools/validate_scope.py
+python3 tools/validate_licensing.py
 python3 tools/validate_hardware.py
 python3 tools/validate_roadmap.py
 python3 -m unittest discover -s tests -v
@@ -65,4 +67,4 @@ No Apple ROM, firmware, macOS image, encryption key, or proprietary SDK is inclu
 
 ## License
 
-Project-authored documentation, tooling and standalone experiments use [MIT](LICENSE). Any future QEMU-derived source must comply with QEMU's applicable GPL terms and retain upstream notices. This repository does not currently vendor QEMU.
+Project-authored documentation, tooling and standalone experiments use [MIT](LICENSE). The [licensing policy](docs/LICENSING.md) and [exact source inventory](docs/licensing.json) define that grant's scope. Future QEMU-derived code needs file-specific license review, upstream notices and the applicable GPL redistribution obligations; QEMU firmware and libraries need separate review. Apple proprietary assets are excluded from repository and release outputs. This repository does not currently vendor QEMU or distribute its binaries.

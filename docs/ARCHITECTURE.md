@@ -40,7 +40,7 @@ Generic QEMU `virt` remains a toolchain experiment with different peripherals. Q
 
 ### Entrypoint consistency contract
 
-The project overview/setup entrypoints are `README.md`, `ROADMAP_365_PHASES.md`, `AGENTS.md`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/REFERENCES.md`, `docs/LINUX_BOOT_MILESTONE.md`, `docs/EXPLORATORY_SCOPE.md` and `docs/decisions/0001-qemu-tcg.md`. Each has one visible research-target declaration near the top. `hardware/t8103.json` carries the structured identity, source references and exclusions. P003 adds the witness specification, P004 adds the exploratory scope specification and P005 adds the executor decision; all nine target declarations are checked.
+The project overview/setup entrypoints are `README.md`, `ROADMAP_365_PHASES.md`, `AGENTS.md`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/REFERENCES.md`, `docs/LINUX_BOOT_MILESTONE.md`, `docs/EXPLORATORY_SCOPE.md`, `docs/decisions/0001-qemu-tcg.md` and `docs/LICENSING.md`. Each has one visible research-target declaration near the top. `hardware/t8103.json` carries the structured identity, source references and exclusions. P003 adds the witness specification, P004 adds the exploratory scope specification, P005 adds the executor decision and P006 adds licensing boundaries; all ten target declarations are checked.
 
 Run `python3 tools/validate_target.py` to check those declarations against the frozen P001 identity. The check also rejects malformed identity data, a missing source, altered compatible values and incomplete or contradictory exclusions. It reports paths/fields and exits nonzero on failure; CI runs it alongside the existing roadmap, hardware and unit checks. The regression suite mutates the metadata and each entrypoint to verify that failures are detected.
 
@@ -135,7 +135,13 @@ Functional CPU/device behavior and observable timer correctness remain obligatio
 
 [ADR 0001](decisions/0001-qemu-tcg.md) selects **QEMU full-system AArch64 TCG** as the initial executor on Linux/WSL2 x86_64. Reusing its translation, exception, software-MMU and device infrastructure lets the project concentrate on the Apple CPU personality and T8103/J274 platform. A second production ISA interpreter would duplicate those architectural obligations. The ADR evaluates interpreters, hardware accelerators, user-mode QEMU, Unicorn, detailed simulators, VMApple and generic `virt`, and records limits and reconsideration criteria.
 
-The existing generic smoke runner explicitly selects `-accel tcg` without accelerator fallback. The future build target remains `aarch64-softmmu`; no T8103 machine is introduced by this decision. QEMU's documented PAuth algorithm choices, exclusive-access caveats, threading and virtual-time behavior preserve the need for independent project tests. The reviewed QEMU source revision is an evidence snapshot; P017's immutable build dependency and P006's licensing review remain separate unfinished phases. See [P005 verification evidence](phases/P005.md).
+The existing generic smoke runner explicitly selects `-accel tcg` without accelerator fallback. The future build target remains `aarch64-softmmu`; no T8103 machine is introduced by this decision. QEMU's documented PAuth algorithm choices, exclusive-access caveats, threading and virtual-time behavior preserve the need for independent project tests. The reviewed QEMU source revision is an evidence snapshot; P017's immutable build dependency remains unfinished. P006 separately records [licensing boundaries](LICENSING.md). See [P005 verification evidence](phases/P005.md).
+
+## P006 licensing boundaries
+
+The [licensing policy](LICENSING.md) distinguishes independently authored MIT source, external development tools and research references, future QEMU-derived code, and excluded Apple proprietary assets. [licensing.json](licensing.json) lists each reviewed source path and the current direct dependency groups. The offline validator requires exact inventory coverage and unchanged reviewed dependency-input digests, including forced-in ignored files. An exported source tree has a separate strict scan mode.
+
+These checks preserve provenance and redistribution boundaries; they do not implement CPU/device behavior or grant any runtime fidelity classification. No QEMU source/binary, Linux/BusyBox image or Apple firmware is introduced. Future combined emulator releases must retain file-level notices and supply the matching source/build material required by their licenses, with separate library/firmware review. A source-only P006 result cannot approve an unexamined future artifact.
 
 ## Scope
 

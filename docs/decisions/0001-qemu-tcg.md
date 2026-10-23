@@ -68,7 +68,7 @@ Do not change ordinary architectural semantics merely to suppress an unexplained
 
 6. **Cross-ISA speed is not guaranteed.** This phase contains no performance measurements or throughput promise. Later measurements must record the host, emulator revision, feature profile and workload. Optimize only after correctness and profiling identify a bottleneck; retain a reference path when changing execution strategy.
 
-7. **Source revisions and dependencies require separate control.** The evidence below reuses QEMU commit `4fc49f46dc95d4a27de2509e7fceb2931e91faeb` (`v11.1.2`). That pins the reviewed text, not the local executable, CI package or a completed reproducible build. The existing setup script's tag default remains scaffolding: P017 must establish and verify the immutable build dependency; P019/P020 cover isolated checkout/configuration. No QEMU source is vendored here. P006's licensing/redistribution review remains open.
+7. **Source revisions and dependencies require separate control.** The evidence below reuses QEMU commit `4fc49f46dc95d4a27de2509e7fceb2931e91faeb` (`v11.1.2`). That pins the reviewed text, not the local executable, CI package or a completed reproducible build. The existing setup script's tag default remains scaffolding: P017 must establish and verify the immutable build dependency; P019/P020 cover isolated checkout/configuration. No QEMU source is vendored here. P006 records the separate [licensing and redistribution boundaries](../LICENSING.md); future third-party imports and binary packages still need their own review.
 
 ## Executable expression of the decision
 

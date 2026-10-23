@@ -1,0 +1,327 @@
+{
+  "schema_version": 1,
+  "phase": "P006",
+  "reviewed_on": "2026-10-23",
+  "baseline_commit": "63606cad4f003d8614481148eba6e837e7faf283",
+  "project_license": {
+    "spdx": "MIT",
+    "notice": "LICENSE",
+    "sha256": "13ef9712858d6db6ea516ac6e4ff2d1d542d10106af462c1a9772cfcf6aae6e9"
+  },
+  "project_files": [
+    ".github/workflows/verify.yml",
+    ".gitignore",
+    "AGENTS.md",
+    "LICENSE",
+    "README.md",
+    "ROADMAP_365_PHASES.md",
+    "docs/ARCHITECTURE.md",
+    "docs/DEVELOPMENT.md",
+    "docs/EXPLORATORY_SCOPE.md",
+    "docs/LICENSING.md",
+    "docs/LINUX_BOOT_MILESTONE.md",
+    "docs/REFERENCES.md",
+    "docs/boot-milestone.json",
+    "docs/decisions/0001-qemu-tcg.md",
+    "docs/fidelity.json",
+    "docs/licensing.json",
+    "docs/phases/P001.md",
+    "docs/phases/P002.md",
+    "docs/phases/P003.md",
+    "docs/phases/P004.md",
+    "docs/phases/P005.md",
+    "docs/phases/P006.md",
+    "docs/scope.json",
+    "experiments/arm64-virt-smoke/Makefile",
+    "experiments/arm64-virt-smoke/hello.S",
+    "experiments/arm64-virt-smoke/linker.ld",
+    "experiments/linux-boot-witness/probe.sh",
+    "experiments/linux-boot-witness/serial-binding.sh",
+    "hardware/t8103.json",
+    "tests/test_arm64_smoke.py",
+    "tests/test_boot_milestone.py",
+    "tests/test_fidelity.py",
+    "tests/test_g4_transcript.py",
+    "tests/test_licensing.py",
+    "tests/test_scope.py",
+    "tests/test_target.py",
+    "tests/test_validation.py",
+    "tools/__init__.py",
+    "tools/check_g4_transcript.py",
+    "tools/run_arm64_smoke.py",
+    "tools/setup_qemu.sh",
+    "tools/validate_boot_milestone.py",
+    "tools/validate_fidelity.py",
+    "tools/validate_hardware.py",
+    "tools/validate_licensing.py",
+    "tools/validate_roadmap.py",
+    "tools/validate_scope.py",
+    "tools/validate_target.py"
+  ],
+  "boundaries": {
+    "qemu_derived": "separate-gpl-review-required",
+    "apple_proprietary": "do-not-redistribute",
+    "third_party_material": "review-before-import",
+    "reference_documents": "links-and-original-summaries-only"
+  },
+  "dependencies": [
+    {
+      "id": "qemu",
+      "kind": "external-tool",
+      "license": "GPL-2.0 as a whole; file-specific compatible licenses; bundled firmware separate",
+      "shipped": false,
+      "sources": [
+        "https://github.com/qemu/qemu/blob/4fc49f46dc95d4a27de2509e7fceb2931e91faeb/LICENSE",
+        "https://github.com/qemu/qemu/blob/4fc49f46dc95d4a27de2509e7fceb2931e91faeb/COPYING"
+      ],
+      "use_sites": [
+        ".github/workflows/verify.yml",
+        "docs/DEVELOPMENT.md",
+        "tools/setup_qemu.sh",
+        "tools/run_arm64_smoke.py"
+      ]
+    },
+    {
+      "id": "qemu-firmware",
+      "kind": "external-runtime-data",
+      "license": "Separate programs; exact ROM and configured build determine applicable licenses",
+      "shipped": false,
+      "sources": [
+        "https://github.com/qemu/qemu/blob/4fc49f46dc95d4a27de2509e7fceb2931e91faeb/LICENSE",
+        "https://github.com/ipxe/ipxe/blob/master/COPYING"
+      ],
+      "use_sites": [
+        ".github/workflows/verify.yml",
+        "docs/DEVELOPMENT.md",
+        "docs/phases/P005.md"
+      ]
+    },
+    {
+      "id": "python",
+      "kind": "external-tool",
+      "license": "PSF License v2 plus historical and incorporated component terms",
+      "shipped": false,
+      "sources": [
+        "https://docs.python.org/3/license.html"
+      ],
+      "use_sites": [
+        ".github/workflows/verify.yml",
+        "docs/DEVELOPMENT.md",
+        "tools/run_arm64_smoke.py",
+        "tools/validate_licensing.py"
+      ]
+    },
+    {
+      "id": "gnu-toolchain",
+      "kind": "external-tool",
+      "license": "Make/GCC/binutils generally GPL-3.0-or-later; runtime exceptions and component terms require per-file review",
+      "shipped": false,
+      "sources": [
+        "https://www.gnu.org/software/make/",
+        "https://github.com/gcc-mirror/gcc/blob/master/gcc/gcc.cc",
+        "https://www.gnu.org/licenses/gcc-exception-3.1.en.html",
+        "https://sourceware.org/binutils/wiki/HomePage"
+      ],
+      "use_sites": [
+        ".github/workflows/verify.yml",
+        "docs/DEVELOPMENT.md",
+        "experiments/arm64-virt-smoke/Makefile"
+      ]
+    },
+    {
+      "id": "qemu-build-dependencies",
+      "kind": "external-tool",
+      "license": "Meson/Ninja Apache-2.0; GLib LGPL-2.1-or-later; pixman MIT; pkg-config provider and linked inputs require review",
+      "shipped": false,
+      "sources": [
+        "https://github.com/mesonbuild/meson/blob/master/COPYING",
+        "https://github.com/ninja-build/ninja/blob/master/COPYING",
+        "https://docs.gtk.org/glib/",
+        "https://pixman.org/",
+        "https://packages.ubuntu.com/noble/pkg-config",
+        "https://github.com/pkgconf/pkgconf/blob/main/COPYING",
+        "https://www.freedesktop.org/wiki/Software/pkg-config/"
+      ],
+      "use_sites": [
+        "docs/DEVELOPMENT.md",
+        "tools/setup_qemu.sh"
+      ]
+    },
+    {
+      "id": "host-environment",
+      "kind": "external-tool",
+      "license": "Git GPL-2.0 with per-file exceptions; Ubuntu/build-essential/POSIX utilities comprise separately licensed packages",
+      "shipped": false,
+      "sources": [
+        "https://github.com/git/git/blob/master/COPYING",
+        "https://packages.debian.org/stable/build-essential",
+        "https://packages.ubuntu.com/noble/"
+      ],
+      "use_sites": [
+        ".github/workflows/verify.yml",
+        "docs/DEVELOPMENT.md",
+        "tools/setup_qemu.sh",
+        "experiments/linux-boot-witness/probe.sh",
+        "experiments/linux-boot-witness/serial-binding.sh"
+      ]
+    },
+    {
+      "id": "github-actions",
+      "kind": "external-tool",
+      "license": "actions/checkout and actions/setup-python MIT; bundled dependencies retain their own terms",
+      "shipped": false,
+      "sources": [
+        "https://github.com/actions/checkout/blob/v4/LICENSE",
+        "https://github.com/actions/setup-python/blob/v5/LICENSE"
+      ],
+      "use_sites": [
+        ".github/workflows/verify.yml"
+      ]
+    },
+    {
+      "id": "linux",
+      "kind": "research-reference",
+      "license": "GPL-2.0-only kernel with Linux-syscall-note; file-specific and dual licenses apply",
+      "shipped": false,
+      "sources": [
+        "https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/COPYING",
+        "https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/Documentation/process/license-rules.rst",
+        "https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/arch/arm64/boot/dts/apple/t8103-j274.dts"
+      ],
+      "use_sites": [
+        "docs/REFERENCES.md",
+        "hardware/t8103.json",
+        "experiments/linux-boot-witness/probe.sh",
+        "experiments/linux-boot-witness/serial-binding.sh",
+        "docs/LINUX_BOOT_MILESTONE.md"
+      ]
+    },
+    {
+      "id": "busybox",
+      "kind": "future-guest",
+      "license": "GPL-2.0-only distribution; exact selected files and future build require review",
+      "shipped": false,
+      "sources": [
+        "https://busybox.net/license.html"
+      ],
+      "use_sites": [
+        "docs/REFERENCES.md",
+        "experiments/linux-boot-witness/probe.sh",
+        "experiments/linux-boot-witness/serial-binding.sh",
+        "docs/LINUX_BOOT_MILESTONE.md"
+      ]
+    },
+    {
+      "id": "asahi-docs",
+      "kind": "research-reference",
+      "license": "CC-BY-3.0",
+      "shipped": false,
+      "sources": [
+        "https://github.com/AsahiLinux/docs/blob/0d1f8917fa88745d62a4c05d802c4a7298c8616b/LICENSE",
+        "https://github.com/AsahiLinux/docs/blob/0d1f8917fa88745d62a4c05d802c4a7298c8616b/docs/platform/introduction.md"
+      ],
+      "use_sites": [
+        "docs/REFERENCES.md",
+        "hardware/t8103.json"
+      ]
+    },
+    {
+      "id": "m1n1",
+      "kind": "research-reference",
+      "license": "Version-dependent: MIT through 1.9.9; GPL-2.0-or-later from 2.0.0; embedded component terms apply",
+      "shipped": false,
+      "sources": [
+        "https://github.com/AsahiLinux/m1n1/blob/7cde7d1a784d851ebfee5579fa363c38b14150c0/README.md"
+      ],
+      "use_sites": [
+        "docs/REFERENCES.md",
+        "docs/DEVELOPMENT.md"
+      ]
+    },
+    {
+      "id": "vendor-documents",
+      "kind": "research-reference",
+      "license": "Apple/Arm publisher-specific terms; citations do not grant copying or firmware redistribution permission",
+      "shipped": false,
+      "sources": [
+        "https://www.apple.com/legal/sla/",
+        "https://www.apple.com/legal/sla/docs/macOSTahoe.pdf",
+        "https://developer.arm.com/Architectures/A-Profile%20Architecture"
+      ],
+      "use_sites": [
+        "docs/REFERENCES.md",
+        "hardware/t8103.json",
+        "docs/LICENSING.md"
+      ]
+    }
+  ],
+  "review_inputs": [
+    {
+      "path": ".github/workflows/verify.yml",
+      "sha256": "f9ad5aee1f6100ccd30aa175f8d9338333013c335e10712c96870cb82859e3ab",
+      "dependencies": [
+        "qemu",
+        "qemu-firmware",
+        "python",
+        "gnu-toolchain",
+        "host-environment",
+        "github-actions"
+      ]
+    },
+    {
+      "path": "docs/DEVELOPMENT.md",
+      "sha256": "deca6bc033cb9b6e9e6bec391f2221101515d10066f49896a1c8c0f4821e2feb",
+      "dependencies": [
+        "qemu",
+        "qemu-firmware",
+        "python",
+        "gnu-toolchain",
+        "qemu-build-dependencies",
+        "host-environment",
+        "m1n1"
+      ]
+    },
+    {
+      "path": "experiments/arm64-virt-smoke/Makefile",
+      "sha256": "bd5acd4e3c579c314c8cf464a8f87bec238231d7a243e93c99e534c93e381f27",
+      "dependencies": [
+        "gnu-toolchain"
+      ]
+    },
+    {
+      "path": "experiments/linux-boot-witness/probe.sh",
+      "sha256": "5b4d2949bcb3fa58c672c75457229d796ec0d348976dbd5c2ca9652a09759431",
+      "dependencies": [
+        "busybox",
+        "linux",
+        "host-environment"
+      ]
+    },
+    {
+      "path": "experiments/linux-boot-witness/serial-binding.sh",
+      "sha256": "f323cb13f903bd19d3f1c68ae657729e7e009a1e50050f20aadf72590c867b5d",
+      "dependencies": [
+        "busybox",
+        "linux",
+        "host-environment"
+      ]
+    },
+    {
+      "path": "tools/run_arm64_smoke.py",
+      "sha256": "bb21b07a2eff9fc19fd36bbce7cf66ef971f8dc45ea01b5c5056cc17d2434147",
+      "dependencies": [
+        "qemu",
+        "python"
+      ]
+    },
+    {
+      "path": "tools/setup_qemu.sh",
+      "sha256": "229c431776cef637b3926f2aa474fcda339a0786006c0d590b16f1f2657ed4c1",
+      "dependencies": [
+        "qemu",
+        "qemu-build-dependencies",
+        "host-environment"
+      ]
+    }
+  ]
+}

@@ -4,19 +4,20 @@
 
 ## Target and metadata checks
 
-Python 3.11+ and a POSIX host shell are sufficient for the P001 target check, P002 fidelity contract, P003 witness contract, P004 scope policy and synthetic regression suite. Run these commands from the repository root:
+Python 3.11+, Git and a POSIX host shell are sufficient for the P001 target check, P002 fidelity contract, P003 witness contract, P004 scope policy, P006 source licensing review and synthetic regression suite. Run these commands from the repository root:
 
 ```sh
 python3 tools/validate_target.py
 python3 tools/validate_fidelity.py
 python3 tools/validate_boot_milestone.py
 python3 tools/validate_scope.py
+python3 tools/validate_licensing.py
 python3 tools/validate_hardware.py
 python3 tools/validate_roadmap.py
 python3 -m unittest discover -s tests -v
 ```
 
-The target validator checks the machine-readable identity and exclusions in `hardware/t8103.json` and the nine visible target declarations listed in the [P001 charter](ARCHITECTURE.md#p001-target-charter), including the P003 witness, P004 scope and P005 executor specifications. It exits nonzero for missing, malformed or conflicting declarations. Its default paths are relative to the script, so invoking it by absolute path also works from another directory. `--root PATH` checks a separate repository snapshot without modifying it. The check is offline and does not inspect a physical Mac or prove device compatibility.
+The target validator checks the machine-readable identity and exclusions in `hardware/t8103.json` and the ten visible target declarations listed in the [P001 charter](ARCHITECTURE.md#p001-target-charter), including the P003 witness, P004 scope, P005 executor and P006 licensing specifications. It exits nonzero for missing, malformed or conflicting declarations. Its default paths are relative to the script, so invoking it by absolute path also works from another directory. `--root PATH` checks a separate repository snapshot without modifying it. The check is offline and does not inspect a physical Mac or prove device compatibility.
 
 ## Fidelity policy check
 
@@ -39,6 +40,14 @@ The T8103 machine and boot artifacts are still unavailable. Do not run the probe
 `python3 tools/validate_scope.py` checks the three exclusions in `docs/scope.json`, their [published specification](EXPLORATORY_SCOPE.md), all 12 named gate boundaries and the optional WS20/WS21 phase annotations. It also runs the P002/P003 contract validators and checks root/docs Markdown plus structured gate prose for explicit contradictory feature claims. `--root PATH` validates a separate snapshot. `render_contract(raw)` returns the expected specification block without writing files.
 
 The [scope-check regression suite](../tests/test_scope.py) exercises false capability promotion, coordinated gate/prose edits, malformed policy, hidden declarations, optional research completion and CLI errors. This bounded lint does not replace review or certify runtime success; P014 remains separate future work.
+
+## Source licensing checks
+
+`python3 tools/validate_licensing.py` checks [licensing.json](licensing.json) against the Git working tree, including tracked ignored files and nonignored untracked source. It requires an explicit inventory entry for each source file, preserves the MIT permission notice, rejects conflicting SPDX headers and unreviewed asset/import paths, and checks SHA-256 digests of the seven reviewed dependency declaration/build/runner inputs. Read the [licensing policy](LICENSING.md) before adding files or updating those digests; a new hash is a recorded human review, not automatic permission to copy code.
+
+Use `python3 tools/validate_licensing.py --root /path/to/clean-export --archive` on an extracted source archive. This explicit mode scans every file without Git ignore rules and rejects Git metadata; it needs no Git executable. Run it before compiling or running Python in that export, since generated ELF files and bytecode are outside the source inventory. Default mode requires a Git root and never silently falls back after a Git error. Both modes read working files, not staged blobs; verify the exact staged export or committed tree before publication.
+
+The check is offline and uses the Python standard library. It records the current source-only boundary, not a transitive package SBOM, proof of authorship or approval of future binary releases. Adding a third-party source file, guest image, QEMU binary, ROM, library or container needs the policy's separate provenance and redistribution review.
 
 ## Generic ARM64 baseline
 

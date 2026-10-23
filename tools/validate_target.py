@@ -16,6 +16,7 @@ ENTRYPOINTS = (
     "docs/ARCHITECTURE.md", "docs/DEVELOPMENT.md", "docs/REFERENCES.md",
     "docs/LINUX_BOOT_MILESTONE.md", "docs/EXPLORATORY_SCOPE.md",
     "docs/decisions/0001-qemu-tcg.md",
+    "docs/LICENSING.md",
 )
 DECLARATION = "> Research target: Apple M1 (T8103/H13G); Mac mini (M1, 2020), J274."
 IDENTITY = {

@@ -6,7 +6,7 @@
 
 **Canonical project plan | Target: original M1 (T8103), Mac mini J274 | Host: Linux/WSL2 x86_64 | CPU: QEMU AArch64 TCG**
 
-This roadmap deliberately separates a runnable ARM64 toolchain from an Apple M1-compatible system. **P001–P003 are complete; P004–P365 remain unchecked.** See the [P001](docs/phases/P001.md), [P002](docs/phases/P002.md) and [P003 completion evidence](docs/phases/P003.md). P003 freezes the G4 witness; it does not mark G4 passed. A completed phase requires the check specified below, a commit, and the evidence described in `AGENTS.md`. The last five phases are independent formal release gates. The workstreams are dependency-ordered, although narrowly scoped investigation may happen in parallel without misreporting completed prerequisites.
+This roadmap deliberately separates a runnable ARM64 toolchain from an Apple M1-compatible system. **P001–P004 are complete; P005–P365 remain unchecked.** See the [P001](docs/phases/P001.md), [P002](docs/phases/P002.md), [P003](docs/phases/P003.md) and [P004 completion evidence](docs/phases/P004.md). P003 freezes the G4 witness; it does not mark G4 passed. P004 freezes exploratory exclusions and grants no runtime capability. A completed phase requires the check specified below, a commit, and the evidence described in `AGENTS.md`. The last five phases are independent formal release gates. The workstreams are dependency-ordered, although narrowly scoped investigation may happen in parallel without misreporting completed prerequisites.
 
 ### Dependency and evidence rules
 
@@ -26,7 +26,7 @@ Depends on: none. Outcome: a measurable, legally distributable, non-misleading s
 - [x] **P001 — Define the original T8103 target** — Record M1/H13G, J274 and excluded variants in the architecture charter. **Check:** all project entrypoints identify the same first SoC and board.
 - [x] **P002 — Separate CPU and SoC correctness** — Publish independent definitions for ISA accuracy, Apple CPU profile, peripherals and whole-machine compatibility. **Check:** each release gate identifies its fidelity level.
 - [x] **P003 — Freeze the first Linux boot milestone** — Define the initramfs shell on Apple UART/AIC as the v0.1 success criterion. **Check:** G4 has explicit prerequisites and a reproducible witness test.
-- [ ] **P004 — Describe exploratory non-goals** — Isolate cycle accuracy, GPU graphics and unmodified macOS from required v0.1 scope. **Check:** no milestone falsely lists these as shipped features.
+- [x] **P004 — Describe exploratory non-goals** — Isolate cycle accuracy, GPU graphics and unmodified macOS from required v0.1 scope. **Check:** no milestone falsely lists these as shipped features.
 - [ ] **P005 — Select upstream emulation foundation** — Document why AArch64 QEMU TCG is the initial executor rather than a second ISA interpreter. **Check:** architecture decision records limits and alternatives.
 - [ ] **P006 — Record licensing boundaries** — Distinguish MIT project-authored files, future GPL QEMU-derived code and Apple proprietary assets. **Check:** dependency and redistribution review passes.
 - [ ] **P007 — Establish a single main branch policy** — Document one authoritative development branch, safe review and tested commits. **Check:** contribution instructions do not demand auxiliary branches.

@@ -67,6 +67,32 @@ Reviewed 2026-10-23. P004 reuses the existing immutable QEMU and Asahi evidence 
 
 No new addresses, timing constants, device behavior, firmware payloads or reference-machine measurements are introduced. The [P004 scope specification](EXPLORATORY_SCOPE.md) records bounded research and the evidence needed before any future scope change.
 
+## P005 emulation foundation evidence
+
+Reviewed 2026-10-23. [ADR 0001](decisions/0001-qemu-tcg.md) selects full-system AArch64 TCG and records alternatives and limits. The decision and division of work are project judgments based on these upstream capabilities; the sources do not certify an Apple CPU or board implementation.
+
+All QEMU evidence links below use the existing immutable source snapshot `4fc49f46dc95d4a27de2509e7fceb2931e91faeb`. The upstream `v11.1.2` tag object `ceaea6cb3e2a7d966f9ca97c7ebb5b88cd764dd0` was resolved to that commit again for P005. This verifies the repository mapping, not a cryptographic release-signature check or a completed P017 build pin. Local/CI distribution packages are separate executables whose actual versions belong in runtime evidence.
+
+| Source ID | Primary evidence and supported claim |
+|---|---|
+| `Q1` | [QEMU modes](https://github.com/qemu/qemu/blob/4fc49f46dc95d4a27de2509e7fceb2931e91faeb/docs/about/index.rst): full-system CPU/memory/device execution and user-mode process translation have different contracts; hardware accelerators execute guest code directly on the host CPU. |
+| `Q2` | [QEMU emulation](https://github.com/qemu/qemu/blob/4fc49f46dc95d4a27de2509e7fceb2931e91faeb/docs/about/emulation.rst): TCG supports software emulation of AArch64 on supported hosts, allowing execution across ISA boundaries. |
+| `Q3` | [System introduction](https://github.com/qemu/qemu/blob/4fc49f46dc95d4a27de2509e7fceb2931e91faeb/docs/system/introduction.rst): TCG host support, hardware-accelerator host constraints, character backends, QMP and debugging facilities. |
+| `Q4` | [Translator internals](https://github.com/qemu/qemu/blob/4fc49f46dc95d4a27de2509e7fceb2931e91faeb/docs/devel/tcg.rst): translated blocks, architectural state, exceptions, software MMU and MMIO callbacks. |
+| `Q5` | [QEMU Object Model](https://github.com/qemu/qemu/blob/4fc49f46dc95d4a27de2509e7fceb2931e91faeb/docs/devel/qom.rst): typed objects and composition for future machine/device integration. |
+| `Q6` | [Memory API](https://github.com/qemu/qemu/blob/4fc49f46dc95d4a27de2509e7fceb2931e91faeb/docs/devel/memory.rst): RAM, MMIO and address-space composition; the framework does not supply Apple register behavior. |
+| `Q7` | [QTest](https://github.com/qemu/qemu/blob/4fc49f46dc95d4a27de2509e7fceb2931e91faeb/docs/devel/testing/qtest.rst): device emulation testing independent of normal guest instruction execution. |
+| `Q8` | [User-mode emulation](https://github.com/qemu/qemu/blob/4fc49f46dc95d4a27de2509e7fceb2931e91faeb/docs/user/main.rst): host syscall translation and process/thread behavior; a different execution layer from this project's guest kernel. |
+| `Q9` | [VMApple](https://github.com/qemu/qemu/blob/4fc49f46dc95d4a27de2509e7fceb2931e91faeb/docs/system/arm/vmapple.rst): Virtualization.framework-compatible platform and documented Apple Silicon/macOS/HVF configuration, distinct from physical T8103. |
+| `Q10` | [ARM virt](https://github.com/qemu/qemu/blob/4fc49f46dc95d4a27de2509e7fceb2931e91faeb/docs/system/arm/virt.rst): synthetic platform, PL011/GIC, generic CPU models and CPU/machine feature interaction. |
+| `Q11` | [ARM CPU features](https://github.com/qemu/qemu/blob/4fc49f46dc95d4a27de2509e7fceb2931e91faeb/docs/system/arm/cpu-features.rst): configuration-dependent coverage and PAuth algorithm selection, including the default QEMU-specific noncryptographic algorithm. |
+| `Q12` | [Multithreaded TCG](https://github.com/qemu/qemu/blob/4fc49f46dc95d4a27de2509e7fceb2931e91faeb/docs/devel/multi-thread-tcg.rst): host/guest memory order, scheduling, synchronization, absence of cache modeling and the documented exclusive-access ABA caveat. This motivates investigation, not a claim that a specific project test has already failed. |
+| `Q13` | [Instruction counting](https://github.com/qemu/qemu/blob/4fc49f46dc95d4a27de2509e7fceb2931e91faeb/docs/devel/tcg-icount.rst): virtual-time accounting is not silicon cycle timing; `icount` is incompatible with MTTCG. |
+| `U1` | [Official Unicorn project](https://www.unicorn-engine.org/): QEMU-derived CPU emulation framework, embedding API and instrumentation; useful as a bounded alternative, not an automatically independent oracle. Live page reviewed on the date above. |
+| `G1` | [gem5 O3CPU](https://www.gem5.org/documentation/general_docs/cpu_models/O3CPU): configurable detailed CPU model loosely based on Alpha 21264. The need for Apple-specific parameters is a project inference; this source is not a Firestorm timing specification. Live page reviewed on the date above. |
+
+P005 introduces no hardware address, proprietary asset or new third-party source dependency. Foundation selection does not complete the later license review, immutable build selection, CPU conformance suite or T8103 implementation.
+
 ## Other development references
 
 These are working references, not complete specifications. For each implemented register or device, record an exact upstream revision and independently verify behavior where possible.

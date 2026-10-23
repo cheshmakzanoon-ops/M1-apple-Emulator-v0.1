@@ -40,7 +40,7 @@ Generic QEMU `virt` remains a toolchain experiment with different peripherals. Q
 
 ### Entrypoint consistency contract
 
-The project overview/setup entrypoints are `README.md`, `ROADMAP_365_PHASES.md`, `AGENTS.md`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/REFERENCES.md`, `docs/LINUX_BOOT_MILESTONE.md` and `docs/EXPLORATORY_SCOPE.md`. Each has one visible research-target declaration near the top. `hardware/t8103.json` carries the structured identity, source references and exclusions. P003 adds the witness specification and P004 adds the exploratory scope specification; all eight target declarations are checked.
+The project overview/setup entrypoints are `README.md`, `ROADMAP_365_PHASES.md`, `AGENTS.md`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/REFERENCES.md`, `docs/LINUX_BOOT_MILESTONE.md`, `docs/EXPLORATORY_SCOPE.md` and `docs/decisions/0001-qemu-tcg.md`. Each has one visible research-target declaration near the top. `hardware/t8103.json` carries the structured identity, source references and exclusions. P003 adds the witness specification, P004 adds the exploratory scope specification and P005 adds the executor decision; all nine target declarations are checked.
 
 Run `python3 tools/validate_target.py` to check those declarations against the frozen P001 identity. The check also rejects malformed identity data, a missing source, altered compatible values and incomplete or contradictory exclusions. It reports paths/fields and exits nonzero on failure; CI runs it alongside the existing roadmap, hardware and unit checks. The regression suite mutates the metadata and each entrypoint to verify that failures are detected.
 
@@ -130,6 +130,12 @@ Unknown or stubbed behavior remains explicitly bounded. A gate label is never ev
 [Exploratory scope](EXPLORATORY_SCOPE.md) and [scope.json](scope.json) isolate cycle accuracy, GPU graphics and unmodified macOS from the headless v0.1 requirement. All three remain unimplemented, and none is credited by G0–G6 or P361–P365. The validator checks each named gate, the visible declarations and the optional status of WS20/WS21, and lints explicit contradictory claims in repository documentation.
 
 Functional CPU/device behavior and observable timer correctness remain obligations. Instruction counting and performance reports do not establish silicon timing. A queue, shader subset or independent framebuffer experiment does not establish general AGX rendering. A Linux or isolated kernel-entry witness does not establish an unmodified macOS system. Limited future experiments retain their own evidence boundaries; the P315 research decision cannot block v0.1. See the specification for the precise limits of the automated audit.
+
+## P005 emulation foundation decision
+
+[ADR 0001](decisions/0001-qemu-tcg.md) selects **QEMU full-system AArch64 TCG** as the initial executor on Linux/WSL2 x86_64. Reusing its translation, exception, software-MMU and device infrastructure lets the project concentrate on the Apple CPU personality and T8103/J274 platform. A second production ISA interpreter would duplicate those architectural obligations. The ADR evaluates interpreters, hardware accelerators, user-mode QEMU, Unicorn, detailed simulators, VMApple and generic `virt`, and records limits and reconsideration criteria.
+
+The existing generic smoke runner explicitly selects `-accel tcg` without accelerator fallback. The future build target remains `aarch64-softmmu`; no T8103 machine is introduced by this decision. QEMU's documented PAuth algorithm choices, exclusive-access caveats, threading and virtual-time behavior preserve the need for independent project tests. The reviewed QEMU source revision is an evidence snapshot; P017's immutable build dependency and P006's licensing review remain separate unfinished phases. See [P005 verification evidence](phases/P005.md).
 
 ## Scope
 

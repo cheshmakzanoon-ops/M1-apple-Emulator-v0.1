@@ -12,6 +12,7 @@
 - Preserve the P002 fidelity definitions and all G0–G6/P361–P365 classifications in `docs/fidelity.json`, the architecture and the roadmap. Run `python3 tools/validate_fidelity.py` after scope or gate changes; labels alone never establish a passed runtime gate.
 - Preserve the P003 G4 boot contract in `docs/boot-milestone.json` and `docs/LINUX_BOOT_MILESTONE.md`; run `python3 tools/validate_boot_milestone.py`. A contract check or synthetic transcript cannot certify a cold Linux boot. Changes to the source-observable profile require source review and matching probe/checker regressions.
 - Preserve the P004 exploratory exclusions in `docs/scope.json` and `docs/EXPLORATORY_SCOPE.md`; run `python3 tools/validate_scope.py`. Cycle accuracy, GPU graphics and unmodified macOS remain outside required v0.1 scope and unimplemented. Narrow research completion must not promote them to shipped capabilities.
+- Preserve the P005 executor decision in `docs/decisions/0001-qemu-tcg.md`: full-system AArch64 TCG, with explicit `-accel tcg` and no implicit hypervisor fallback in the generic smoke runner. Changes to the foundation need a linked decision and corresponding execution evidence; QEMU source citations do not complete P017's build pin.
 
 ## Non-negotiable correctness rules
 

@@ -16,7 +16,7 @@ python3 tools/validate_roadmap.py
 python3 -m unittest discover -s tests -v
 ```
 
-The target validator checks the machine-readable identity and exclusions in `hardware/t8103.json` and the eight visible target declarations listed in the [P001 charter](ARCHITECTURE.md#p001-target-charter), including the P003 witness and P004 scope specifications. It exits nonzero for missing, malformed or conflicting declarations. Its default paths are relative to the script, so invoking it by absolute path also works from another directory. `--root PATH` checks a separate repository snapshot without modifying it. The check is offline and does not inspect a physical Mac or prove device compatibility.
+The target validator checks the machine-readable identity and exclusions in `hardware/t8103.json` and the nine visible target declarations listed in the [P001 charter](ARCHITECTURE.md#p001-target-charter), including the P003 witness, P004 scope and P005 executor specifications. It exits nonzero for missing, malformed or conflicting declarations. Its default paths are relative to the script, so invoking it by absolute path also works from another directory. `--root PATH` checks a separate repository snapshot without modifying it. The check is offline and does not inspect a physical Mac or prove device compatibility.
 
 ## Fidelity policy check
 
@@ -42,6 +42,8 @@ The [scope-check regression suite](../tests/test_scope.py) exercises false capab
 
 ## Generic ARM64 baseline
 
+[ADR 0001](decisions/0001-qemu-tcg.md) selects QEMU **full-system AArch64 TCG** for the Linux/WSL2 x86_64 development baseline. The runner passes `-accel tcg` explicitly, with no KVM/HVF fallback. `qemu-aarch64` user-mode translation, an accelerated VMApple machine and the future T8103 machine are different execution targets; they cannot substitute for this command's evidence.
+
 On Ubuntu or Windows 11 with WSL2 Ubuntu, install Python 3.11+, GNU Make, QEMU ARM system emulation, AArch64 cross GCC/binutils, Git, Meson and Ninja:
 
 ```sh
@@ -56,17 +58,25 @@ make -C experiments/arm64-virt-smoke
 python3 tools/run_arm64_smoke.py experiments/arm64-virt-smoke/build/hello.elf
 ```
 
-This baseline runs **QEMU `virt`**, not an Apple M1 machine. It is solely the portable CI/smoke-test foundation.
+This baseline runs **QEMU `virt`** with a generic Cortex-A57 and PL011 UART. It is solely the portable CI/smoke-test foundation. The payload prints its marker then idles, so the runner deliberately ends it after the timeout (eight seconds by default). `--timeout SECONDS` must be finite, positive and at most 300 seconds; the bound avoids platform timeout overflow and is a smoke-test budget, not a hardware timing claim. Missing tools/files, emulator launch errors, missing markers and nonzero emulator failures return nonzero; a marker cannot hide an emulator failure. A deliberate timeout kill after the marker is the expected looping-payload completion path.
+
+The focused runner tests are available independently of QEMU:
+
+```sh
+python3 -m unittest discover -s tests -p test_arm64_smoke.py -v
+```
+
+Those tests use controlled subprocess results; they verify command selection and failure handling, not ARM architectural behavior. The full suite remains required. Actual generic guest execution needs the compiler and emulator above, and later Apple-target evidence needs its own machine and artifacts.
 
 ## QEMU source checkout
 
-Use a fixed QEMU `v11.1.2` upstream baseline for future T8103 device and machine integrations:
+The existing setup scaffold defaults to the QEMU `v11.1.2` tag for future T8103 device and machine integrations:
 
 ```sh
 sh tools/setup_qemu.sh
 ```
 
-The script places the checkout/build under the ignored `vendor/` directory. Do not copy upstream QEMU into this repository without preserving license and source provenance. Actual Apple board integration and tests are future roadmap phases.
+The script places the checkout/build under the ignored `vendor/` directory. Its tag-based check does not yet establish P017's immutable dependency pin or P019's complete checkout verification. The ADR's source commit pins reviewed evidence only; distribution QEMU used by the generic smoke job can have a different version. Record the actual executable version with runtime results. Do not copy upstream QEMU into this repository without preserving license and source provenance. Actual Apple board integration and tests are future roadmap phases.
 
 ## Research-device safety
 

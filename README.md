@@ -26,6 +26,7 @@ Cycle-accurate Firestorm simulation, fully functioning Apple AGX graphics, and u
 - [P002 fidelity contract](docs/ARCHITECTURE.md#p002-fidelity-contract) — independent CPU, peripheral and whole-machine definitions; all 12 development/release gates classified.
 - [P003 Linux boot milestone](docs/LINUX_BOOT_MILESTONE.md) — explicit G4 prerequisites, reproducible serial-shell witness and evidence requirements; actual Linux boot remains future work.
 - [P004 exploratory scope](docs/EXPLORATORY_SCOPE.md) — explicit boundaries for timing, graphics and unmodified macOS; no runtime capability is established.
+- [P005 emulation foundation decision](docs/decisions/0001-qemu-tcg.md) — why full-system AArch64 QEMU TCG is selected, alternatives considered and limits that still require testing.
 - [Hardware reference register](hardware/t8103.json) — sourced addresses, uncertainty, and schema-validated data.
 - [Reference material](docs/REFERENCES.md) — authoritative upstream projects and publications.
 - [Local development](docs/DEVELOPMENT.md) — Windows/WSL2/Linux setup and current smoke tests.
@@ -54,7 +55,7 @@ make -C experiments/arm64-virt-smoke
 python3 tools/run_arm64_smoke.py experiments/arm64-virt-smoke/build/hello.elf
 ```
 
-The smoke test should print `ARM64 baseline OK` using the **QEMU `virt` PL011 UART**. It is deliberately isolated in `experiments/` until our actual Apple UART and custom T8103 machine exist.
+The smoke test explicitly selects **TCG** and should print `ARM64 baseline OK` using the **QEMU `virt` PL011 UART**. It is deliberately isolated in `experiments/` until our actual Apple UART and custom T8103 machine exist. The payload then idles; the runner terminates it after its bounded timeout. An emulator error cannot pass merely by printing the marker.
 
 ## Fidelity policy
 

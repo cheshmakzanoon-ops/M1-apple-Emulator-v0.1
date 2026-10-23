@@ -39,5 +39,9 @@ jobs:
           sudo apt-get install -y gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu qemu-system-arm
       - name: Compile generic ARM64 baseline guest
         run: make -C experiments/arm64-virt-smoke
-      - name: Boot generic QEMU virt baseline (NOT M1)
-        run: python3 tools/run_arm64_smoke.py experiments/arm64-virt-smoke/build/hello.elf
+      - name: Boot generic QEMU virt with explicit TCG (NOT M1)
+        run: |
+          qemu-system-aarch64 --version
+          aarch64-linux-gnu-gcc --version
+          sha256sum experiments/arm64-virt-smoke/build/hello.elf
+          python3 tools/run_arm64_smoke.py experiments/arm64-virt-smoke/build/hello.elf

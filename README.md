@@ -6,7 +6,7 @@
 
 An open, incremental research project to model the **original Apple M1 (T8103)** at the CPU/SoC interface. The initial reference machine is the **2020 M1 Mac mini (J274)**. The intended production execution engine is **QEMU's AArch64 TCG**, extended with Apple-specific CPU behavior, a T8103 board, and validated peripheral models.
 
-> **Current status: P001–P005 complete — target, fidelity, Linux boot-witness and exploratory scope contracts checked; the QEMU TCG foundation selected and its generic execution path tested.** See the [P001](docs/phases/P001.md), [P002](docs/phases/P002.md), [P003](docs/phases/P003.md), [P004](docs/phases/P004.md) and [P005 completion evidence](docs/phases/P005.md). This repository does **not** yet emulate an M1 CPU or boot macOS/Linux on a T8103 model. The P003 probe/checker tests use synthetic evidence; G4 remains unrun. Its executable ARM64 smoke test uses QEMU's generic `virt` board to validate the development toolchain. Do not mistake that test for M1 emulation.
+> **Current status: P001–P006 complete — target, fidelity, Linux boot-witness and exploratory scope contracts checked; QEMU TCG selected and tested; source licensing and redistribution boundaries reviewed and enforced.** See the [P001](docs/phases/P001.md), [P002](docs/phases/P002.md), [P003](docs/phases/P003.md), [P004](docs/phases/P004.md), [P005](docs/phases/P005.md) and [P006 completion evidence](docs/phases/P006.md). This repository does **not** yet emulate an M1 CPU or boot macOS/Linux on a T8103 model. The P003 probe/checker tests use synthetic evidence; G4 remains unrun. Its executable ARM64 smoke test uses QEMU's generic `virt` board to validate the development toolchain. Do not mistake that test for M1 emulation.
 
 ## Project target
 

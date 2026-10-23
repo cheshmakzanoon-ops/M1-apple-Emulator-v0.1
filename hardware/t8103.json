@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "chip": "Apple M1",
+  "soc": "T8103",
+  "reference_board": "J274 (2020 M1 Mac mini)",
+  "scope": "Incomplete known physical regions; no device implemented",
+  "sources": {
+    "asahi_memmap": "https://asahilinux.org/docs/hw/soc/memmap/",
+    "linux_dtsi": "https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/apple/t8103.dtsi"
+  },
+  "regions": [
+    {"name":"dram_base","base":"0x800000000","size":null,"kind":"ram","confidence":"documented","status":"reference-only","notes":"8/16 GiB device configurations have carveouts","source":"asahi_memmap"},
+    {"name":"debug_uart0","base":"0x235200000","size":"0x4000","kind":"mmio","confidence":"documented","status":"reference-only","notes":"Apple debug UART, not generic virt PL011","source":"asahi_memmap"},
+    {"name":"apple_aic","base":"0x23B100000","size":"0x8000","kind":"mmio","confidence":"documented","status":"reference-only","notes":"Linux t8103.dtsi sized window; Asahi raw survey includes surrounding region","source":"linux_dtsi"},
+    {"name":"power_manager","base":"0x23B700000","size":"0x14000","kind":"mmio","confidence":"documented","status":"reference-only","notes":"T8103 PMGR","source":"linux_dtsi"},
+    {"name":"gpio","base":"0x23C100000","size":"0x100000","kind":"mmio","confidence":"documented","status":"reference-only","notes":"Apple pin controller","source":"asahi_memmap"},
+    {"name":"watchdog","base":"0x23D2B0000","size":"0x4000","kind":"mmio","confidence":"documented","status":"reference-only","notes":"T8103 WDT","source":"linux_dtsi"}
+  ]
+}

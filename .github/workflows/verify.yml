@@ -1,0 +1,39 @@
+name: Verify baseline and roadmap
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  metadata-and-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate hardware evidence and all 365 phases
+        run: |
+          python3 tools/validate_hardware.py
+          python3 tools/validate_roadmap.py
+      - name: Unit tests
+        run: python3 -m unittest discover -s tests -v
+
+  arm64-toolchain-smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install guest cross compiler and QEMU
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu qemu-system-arm
+      - name: Compile generic ARM64 baseline guest
+        run: make -C experiments/arm64-virt-smoke
+      - name: Boot generic QEMU virt baseline (NOT M1)
+        run: python3 tools/run_arm64_smoke.py experiments/arm64-virt-smoke/build/hello.elf

@@ -1,5 +1,49 @@
 # Emulator architecture and acceptance gates
 
+> Research target: Apple M1 (T8103/H13G); Mac mini (M1, 2020), J274.
+
+## P001 target charter
+
+The first machine is the **original Apple M1 SoC in the 2020 Mac mini board J274**. This selection is a project requirement, not a claim of implemented compatibility. `hardware/t8103.json` is the machine-readable identity record; the following names refer to different layers of that one target.
+
+| Identity layer | Selected value | Evidence |
+|---|---|---|
+| Marketed SoC | Apple M1 | Linux Apple binding; Apple product specifications |
+| SoC identifier | `T8103` | Linux Apple binding |
+| Internal SoC name | `H13G` | Linux Apple binding; Asahi SoC names |
+| Reference product | Mac mini (M1, 2020) | Apple specifications; Linux J274 description |
+| Board / ADT target type | `J274` | Linux J274 description |
+| Model identifier | `Macmini9,1` | Asahi device list |
+| Product identifier | `J274AP` | Asahi device list |
+| Linux root compatible, in order | `apple,j274`, `apple,t8103`, `apple,arm-platform` | Linux J274 description |
+
+The exact source URLs and immutable revisions are recorded in [P001 identity evidence](REFERENCES.md#p001-identity-evidence). `H13G` is an internal SoC name, not a CPU instruction set or board. `J274AP` and `Macmini9,1` identify the product/model; neither replaces `J274` in the Linux board compatible. The Linux binding lowercases the ADT target type and SoC ID for compatible strings. The sources establish identity; they do not establish reset state, register semantics, ISA extension coverage or timing.
+
+### Excluded variants and boards
+
+P001 selects exactly one SoC/board pair. All other pairs are excluded from the initial target, including:
+
+| Excluded hardware | Identifier or category | Scope decision |
+|---|---|---|
+| M1 Pro, M1 Max, M1 Ultra | `T6000`, `T6001`, `T6002`, respectively | Separate SoCs; the M1 family name does not extend T8103 coverage. |
+| M1 MacBook Pro and MacBook Air | T8103 boards `J293` and `J313` | A shared SoC does not validate a different board. |
+| M1 iMac, four-port and two-port models | T8103 boards `J456` and `J457`, respectively | Board-specific devices/configuration need separate work. |
+| M2 and later M-series | All generations and variants after M1 | Outside the original T8103 target. |
+| A-series products | All A-series SoCs and boards | Shared CPU lineage does not imply SoC compatibility. |
+| Any other board or product | Every board other than J274, including other products marketed with M1 | No implicit expansion to an unlisted target. |
+
+The pinned Linux Apple binding and Asahi device list support the named board and SoC distinctions. The broader exclusions are deliberate project scope decisions, not assertions that these machines can never be emulated.
+
+Generic QEMU `virt` remains a toolchain experiment with different peripherals. QEMU `vmapple` is a separate virtual platform. Neither is an alternative spelling or implementation of the selected J274/T8103 machine; the [upstream QEMU references](REFERENCES.md#other-development-references) describe those platforms. Existing generic smoke-test results do not count as target validation.
+
+### Entrypoint consistency contract
+
+The project overview/setup entrypoints are `README.md`, `ROADMAP_365_PHASES.md`, `AGENTS.md`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md` and `docs/REFERENCES.md`. Each has one visible research-target declaration near the top. `hardware/t8103.json` carries the structured identity, source references and exclusions.
+
+Run `python3 tools/validate_target.py` to check those declarations against the frozen P001 identity. The check also rejects malformed identity data, a missing source, altered compatible values and incomplete or contradictory exclusions. It reports paths/fields and exits nonzero on failure; CI runs it alongside the existing roadmap, hardware and unit checks. The regression suite mutates the metadata and each entrypoint to verify that failures are detected.
+
+This is a declaration consistency check, not a semantic audit of all prose or a hardware probe. Internal assembly/linker files describe the generic experiment rather than an Apple target. A future project overview/setup entrypoint must be added to the validator inventory. Any future expansion of the first target needs an explicit charter change, revised evidence and corresponding tests; changing one banner is insufficient.
+
 ## Scope
 
 **SoC:** original Apple M1 T8103/H13G. **Board:** 2020 M1 Mac mini/J274. **Host:** Linux x86_64/WSL2. **CPU execution:** QEMU AArch64 TCG plus Apple-specific identity and system registers. **Guest:** bare-metal tests, then a T8103-targeted Linux kernel and initramfs. **Release goal:** headless Linux boot using Apple-compatible peripherals, not generic QEMU `virt` hardware.

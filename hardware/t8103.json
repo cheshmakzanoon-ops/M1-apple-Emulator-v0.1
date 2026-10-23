@@ -3,17 +3,111 @@
   "chip": "Apple M1",
   "soc": "T8103",
   "reference_board": "J274 (2020 M1 Mac mini)",
+  "target": {
+    "internal_name": "H13G",
+    "board_id": "J274",
+    "board_name": "Mac mini (M1, 2020)",
+    "model_identifier": "Macmini9,1",
+    "product_identifier": "J274AP",
+    "linux_compatible": [
+      "apple,j274",
+      "apple,t8103",
+      "apple,arm-platform"
+    ],
+    "identity_sources": [
+      "linux_apple_binding",
+      "linux_j274",
+      "asahi_devices",
+      "asahi_soc_codenames",
+      "apple_mac_mini_2020"
+    ],
+    "excluded_soc_variants": {
+      "T6000": "Apple M1 Pro",
+      "T6001": "Apple M1 Max",
+      "T6002": "Apple M1 Ultra"
+    },
+    "excluded_t8103_boards": [
+      "J293",
+      "J313",
+      "J456",
+      "J457"
+    ],
+    "excluded_families": [
+      "M2 and later M-series",
+      "A-series"
+    ],
+    "other_boards": "excluded"
+  },
   "scope": "Incomplete known physical regions; no device implemented",
   "sources": {
     "asahi_memmap": "https://asahilinux.org/docs/hw/soc/memmap/",
-    "linux_dtsi": "https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/apple/t8103.dtsi"
+    "linux_dtsi": "https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/apple/t8103.dtsi",
+    "linux_apple_binding": "https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/Documentation/devicetree/bindings/arm/apple.yaml",
+    "linux_j274": "https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/arch/arm64/boot/dts/apple/t8103-j274.dts",
+    "asahi_devices": "https://github.com/AsahiLinux/docs/blob/0d1f8917fa88745d62a4c05d802c4a7298c8616b/docs/hw/devices/device-list.md",
+    "asahi_soc_codenames": "https://github.com/AsahiLinux/docs/blob/0d1f8917fa88745d62a4c05d802c4a7298c8616b/docs/hw/soc/soc-codenames.md",
+    "apple_mac_mini_2020": "https://support.apple.com/en-us/111894"
   },
   "regions": [
-    {"name":"dram_base","base":"0x800000000","size":null,"kind":"ram","confidence":"documented","status":"reference-only","notes":"8/16 GiB device configurations have carveouts","source":"asahi_memmap"},
-    {"name":"debug_uart0","base":"0x235200000","size":"0x4000","kind":"mmio","confidence":"documented","status":"reference-only","notes":"Apple debug UART, not generic virt PL011","source":"asahi_memmap"},
-    {"name":"apple_aic","base":"0x23B100000","size":"0x8000","kind":"mmio","confidence":"documented","status":"reference-only","notes":"Linux t8103.dtsi sized window; Asahi raw survey includes surrounding region","source":"linux_dtsi"},
-    {"name":"power_manager","base":"0x23B700000","size":"0x14000","kind":"mmio","confidence":"documented","status":"reference-only","notes":"T8103 PMGR","source":"linux_dtsi"},
-    {"name":"gpio","base":"0x23C100000","size":"0x100000","kind":"mmio","confidence":"documented","status":"reference-only","notes":"Apple pin controller","source":"asahi_memmap"},
-    {"name":"watchdog","base":"0x23D2B0000","size":"0x4000","kind":"mmio","confidence":"documented","status":"reference-only","notes":"T8103 WDT","source":"linux_dtsi"}
+    {
+      "name": "dram_base",
+      "base": "0x800000000",
+      "size": null,
+      "kind": "ram",
+      "confidence": "documented",
+      "status": "reference-only",
+      "notes": "8/16 GiB device configurations have carveouts",
+      "source": "asahi_memmap"
+    },
+    {
+      "name": "debug_uart0",
+      "base": "0x235200000",
+      "size": "0x4000",
+      "kind": "mmio",
+      "confidence": "documented",
+      "status": "reference-only",
+      "notes": "Apple debug UART, not generic virt PL011",
+      "source": "asahi_memmap"
+    },
+    {
+      "name": "apple_aic",
+      "base": "0x23B100000",
+      "size": "0x8000",
+      "kind": "mmio",
+      "confidence": "documented",
+      "status": "reference-only",
+      "notes": "Linux t8103.dtsi sized window; Asahi raw survey includes surrounding region",
+      "source": "linux_dtsi"
+    },
+    {
+      "name": "power_manager",
+      "base": "0x23B700000",
+      "size": "0x14000",
+      "kind": "mmio",
+      "confidence": "documented",
+      "status": "reference-only",
+      "notes": "T8103 PMGR",
+      "source": "linux_dtsi"
+    },
+    {
+      "name": "gpio",
+      "base": "0x23C100000",
+      "size": "0x100000",
+      "kind": "mmio",
+      "confidence": "documented",
+      "status": "reference-only",
+      "notes": "Apple pin controller",
+      "source": "asahi_memmap"
+    },
+    {
+      "name": "watchdog",
+      "base": "0x23D2B0000",
+      "size": "0x4000",
+      "kind": "mmio",
+      "confidence": "documented",
+      "status": "reference-only",
+      "notes": "T8103 WDT",
+      "source": "linux_dtsi"
+    }
   ]
 }

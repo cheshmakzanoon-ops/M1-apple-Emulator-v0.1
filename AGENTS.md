@@ -1,11 +1,14 @@
 # Engineering instructions
 
+> Research target: Apple M1 (T8103/H13G); Mac mini (M1, 2020), J274.
+
 ## Scope and branch policy
 
 - Work on `main` only, unless the repository owner explicitly requests a separate branch.
 - Preserve existing work. Commit cohesive, tested progress; never use LOC count as a proxy for fidelity.
 - `ROADMAP_365_PHASES.md` is the canonical plan. Do not mark a phase complete without proof matching its acceptance condition.
 - Update `docs/ARCHITECTURE.md` and `hardware/t8103.json` alongside hardware-model changes.
+- Preserve the P001 target charter and its declared identity in all six documented project entrypoints; run `python3 tools/validate_target.py` when changing target metadata or entrypoint documentation. Add any new project overview/setup entrypoint to the validator's inventory.
 
 ## Non-negotiable correctness rules
 
@@ -21,6 +24,6 @@
 
 - Build succeeds on supported Linux host or the known unavailable dependency is documented.
 - Focused tests cover both expected and edge-case behavior.
-- All existing checks still pass: `python3 -m unittest discover -s tests -v`, `python3 tools/validate_roadmap.py`, and `python3 tools/validate_hardware.py`.
+- All checks pass: `python3 -m unittest discover -s tests -v`, `python3 tools/validate_target.py`, `python3 tools/validate_roadmap.py`, and `python3 tools/validate_hardware.py`.
 - A short completion note records evidence, deviations, known limitations, and the relevant phase identifier.
 - Status is honest: a failing or untested component is never described as implemented.

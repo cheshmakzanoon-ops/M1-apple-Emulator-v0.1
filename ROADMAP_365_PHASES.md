@@ -1,8 +1,10 @@
 # Apple M1 / T8103 Emulator — 365-Phase Engineering Roadmap
 
+> Research target: Apple M1 (T8103/H13G); Mac mini (M1, 2020), J274.
+
 **Canonical project plan | Target: original M1 (T8103), Mac mini J274 | Host: Linux/WSL2 x86_64 | CPU: QEMU AArch64 TCG**
 
-This roadmap deliberately separates a runnable ARM64 toolchain from an Apple M1-compatible system. **All phases initially remain unchecked.** A completed phase requires the check specified below, a commit, and the evidence described in `AGENTS.md`. The last five phases are independent formal release gates. The workstreams are dependency-ordered, although narrowly scoped investigation may happen in parallel without misreporting completed prerequisites.
+This roadmap deliberately separates a runnable ARM64 toolchain from an Apple M1-compatible system. **P001 is complete; P002–P365 remain unchecked.** See the [P001 completion evidence](docs/phases/P001.md). A completed phase requires the check specified below, a commit, and the evidence described in `AGENTS.md`. The last five phases are independent formal release gates. The workstreams are dependency-ordered, although narrowly scoped investigation may happen in parallel without misreporting completed prerequisites.
 
 ### Dependency and evidence rules
 
@@ -19,7 +21,7 @@ This roadmap deliberately separates a runnable ARM64 toolchain from an Apple M1-
 
 Depends on: none. Outcome: a measurable, legally distributable, non-misleading scope.
 
-- [ ] **P001 — Define the original T8103 target** — Record M1/H13G, J274 and excluded variants in the architecture charter. **Check:** all project entrypoints identify the same first SoC and board.
+- [x] **P001 — Define the original T8103 target** — Record M1/H13G, J274 and excluded variants in the architecture charter. **Check:** all project entrypoints identify the same first SoC and board.
 - [ ] **P002 — Separate CPU and SoC correctness** — Publish independent definitions for ISA accuracy, Apple CPU profile, peripherals and whole-machine compatibility. **Check:** each release gate identifies its fidelity level.
 - [ ] **P003 — Freeze the first Linux boot milestone** — Define the initramfs shell on Apple UART/AIC as the v0.1 success criterion. **Check:** G4 has explicit prerequisites and a reproducible witness test.
 - [ ] **P004 — Describe exploratory non-goals** — Isolate cycle accuracy, GPU graphics and unmodified macOS from required v0.1 scope. **Check:** no milestone falsely lists these as shipped features.

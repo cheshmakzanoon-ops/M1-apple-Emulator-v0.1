@@ -4,7 +4,7 @@
 
 **Canonical project plan | Target: original M1 (T8103), Mac mini J274 | Host: Linux/WSL2 x86_64 | CPU: QEMU AArch64 TCG**
 
-This roadmap deliberately separates a runnable ARM64 toolchain from an Apple M1-compatible system. **P001 is complete; P002–P365 remain unchecked.** See the [P001 completion evidence](docs/phases/P001.md). A completed phase requires the check specified below, a commit, and the evidence described in `AGENTS.md`. The last five phases are independent formal release gates. The workstreams are dependency-ordered, although narrowly scoped investigation may happen in parallel without misreporting completed prerequisites.
+This roadmap deliberately separates a runnable ARM64 toolchain from an Apple M1-compatible system. **P001–P002 are complete; P003–P365 remain unchecked.** See the [P001](docs/phases/P001.md) and [P002 completion evidence](docs/phases/P002.md). A completed phase requires the check specified below, a commit, and the evidence described in `AGENTS.md`. The last five phases are independent formal release gates. The workstreams are dependency-ordered, although narrowly scoped investigation may happen in parallel without misreporting completed prerequisites.
 
 ### Dependency and evidence rules
 
@@ -22,7 +22,7 @@ This roadmap deliberately separates a runnable ARM64 toolchain from an Apple M1-
 Depends on: none. Outcome: a measurable, legally distributable, non-misleading scope.
 
 - [x] **P001 — Define the original T8103 target** — Record M1/H13G, J274 and excluded variants in the architecture charter. **Check:** all project entrypoints identify the same first SoC and board.
-- [ ] **P002 — Separate CPU and SoC correctness** — Publish independent definitions for ISA accuracy, Apple CPU profile, peripherals and whole-machine compatibility. **Check:** each release gate identifies its fidelity level.
+- [x] **P002 — Separate CPU and SoC correctness** — Publish independent definitions for ISA accuracy, Apple CPU profile, peripherals and whole-machine compatibility. **Check:** each release gate identifies its fidelity level.
 - [ ] **P003 — Freeze the first Linux boot milestone** — Define the initramfs shell on Apple UART/AIC as the v0.1 success criterion. **Check:** G4 has explicit prerequisites and a reproducible witness test.
 - [ ] **P004 — Describe exploratory non-goals** — Isolate cycle accuracy, GPU graphics and unmodified macOS from required v0.1 scope. **Check:** no milestone falsely lists these as shipped features.
 - [ ] **P005 — Select upstream emulation foundation** — Document why AArch64 QEMU TCG is the initial executor rather than a second ISA interpreter. **Check:** architecture decision records limits and alternatives.
@@ -499,10 +499,12 @@ Depends on: core gates G0–G4 and evidence work. Outcome: trustworthy, maintain
 
 ## Formal release acceptance phases (P361–P365)
 
+Each gate below declares its independent fidelity level(s) from the [P002 fidelity contract](docs/ARCHITECTURE.md#p002-fidelity-contract). These labels describe the scope of required evidence, not a passed result.
+
 These last gates do not grant automatic completion of exploratory WS20/WS21. They verify that the **headless M1 research release** is honest, reproducible and safe.
 
-- [ ] **P361 — Independently reproduce CPU and board gates** — Execute G1/G2 on a fresh host with source-linked T8103 map. **Check:** Apple machine runs its own UART ELF without generic `virt` substitution.
-- [ ] **P362 — Independently reproduce interrupts and SMP** — Run G3 with timers and two-core IPI protocol in isolation. **Check:** no lost, duplicate or stuck interrupt remains.
-- [ ] **P363 — Independently reproduce Linux breakthrough** — Boot exact published T8103 kernel/image artifacts from cold reset. **Check:** G4 reaches interactive initramfs shell over Apple UART.
-- [ ] **P364 — Audit fidelity, licensing and trace evidence** — Recheck hardware provenance, sanitizer results, limitations, GPL notices and excluded Apple blobs. **Check:** release contains no secret data or unsupported compatibility claims.
-- [ ] **P365 — Publish v0.1 final acceptance report** — Release a complete reproducibility record, passed gates, open defects and future research queue. **Check:** an independent reviewer can verify the published evidence end to end.
+- [ ] **P361 — Independently reproduce CPU and board gates** — Execute G1/G2 on a fresh host with source-linked T8103 map. **Check:** Apple machine runs its own UART ELF without generic `virt` substitution. **Fidelity:** `isa`, `apple-cpu`, `peripheral`.
+- [ ] **P362 — Independently reproduce interrupts and SMP** — Run G3 with timers and two-core IPI protocol in isolation. **Check:** no lost, duplicate or stuck interrupt remains. **Fidelity:** `isa`, `apple-cpu`, `peripheral`.
+- [ ] **P363 — Independently reproduce Linux breakthrough** — Boot exact published T8103 kernel/image artifacts from cold reset. **Check:** G4 reaches interactive initramfs shell over Apple UART. **Fidelity:** `machine-linux`.
+- [ ] **P364 — Audit fidelity, licensing and trace evidence** — Recheck hardware provenance, sanitizer results, limitations, GPL notices and excluded Apple blobs. **Check:** release contains no secret data or unsupported compatibility claims. **Fidelity:** `evidence-audit`.
+- [ ] **P365 — Publish v0.1 final acceptance report** — Release a complete reproducibility record, passed gates, open defects and future research queue. **Check:** an independent reviewer can verify the published evidence end to end. **Fidelity:** `evidence-audit`.

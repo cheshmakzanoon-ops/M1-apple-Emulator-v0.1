@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "levels": [
+    {
+      "id": "toolchain",
+      "title": "Toolchain validation",
+      "definition": "The host tools can compile and execute an original AArch64 smoke payload on the explicitly named generic platform. This is a development prerequisite, outside target hardware conformance.",
+      "evidence": "Record the compiler, emulator version, machine and CPU options, original payload, command, exit result and expected console marker. The existing experiment uses QEMU `virt` and PL011; its result belongs only to this level.",
+      "exclusions": "No ISA-wide conformance, Apple CPU profile, T8103 peripheral or J274 whole-machine compatibility is established. See [QEMU platform evidence](REFERENCES.md#p002-fidelity-evidence)."
+    },
+    {
+      "id": "isa",
+      "title": "ISA accuracy",
+      "definition": "For a declared AArch64 architectural feature subset, the executor produces the specified instruction results and visible state: general/SIMD/FP registers, flags, exceptions, privilege transitions, translation and access faults, atomic operations, barriers and permitted memory-ordering outcomes. Advertised features must agree with implemented behavior.",
+      "evidence": "Use feature-specific positive and negative tests with initial state, expected results or allowed outcome sets, architecture revision, execution options and reproducible logs. Cover faults and privilege restrictions as well as successful execution. A small ELF establishes only the instructions and paths it actually exercises.",
+      "exclusions": "This does not establish Apple implementation-defined behavior, T8103 devices, Linux/macOS compatibility or Firestorm/Icestorm pipeline timing. The normative architecture and microarchitecture distinction is sourced in [P002 references](REFERENCES.md#p002-fidelity-evidence)."
+    },
+    {
+      "id": "apple-cpu",
+      "title": "Apple CPU profile",
+      "definition": "A separately declared, source-backed Firestorm/Icestorm guest-visible personality supplies the selected identities, topology, feature exposure and Apple implementation-defined system-register behavior. State the covered core type, reset values where known, access permissions, read/write effects and trap behavior; record unknowns and deliberate stubs.",
+      "evidence": "For every claimed identity, feature or register behavior, cite its source/revision and exercise supported and invalid accesses with expected state or exceptions. Where available, compare sanitized reference-machine observations. An ID string or constant readback alone establishes only that response, not a complete CPU personality.",
+      "exclusions": "Architectural test success does not supply missing Apple register semantics. A profile does not prove peripherals, whole-machine software compatibility, hidden microarchitecture or cycle timing. [Asahi CPU research](REFERENCES.md#p002-fidelity-evidence) contains partial observations and unknowns, not a complete Apple CPU specification."
+    },
+    {
+      "id": "peripheral",
+      "title": "T8103 peripheral accuracy",
+      "definition": "Each named T8103 device implements a bounded, externally observable register/state-machine contract: reset, access width/alignment, masks, side effects, invalid or unknown accesses, interrupt assertion/acknowledgment/deassertion and DMA boundaries where applicable. Include CPU-to-device integration where the tested behavior crosses that boundary.",
+      "evidence": "Publish the device/register subset, source revisions, reset and transition tests, invalid-access results and any sanitized silicon comparisons. Distinguish AIC IRQ delivery, the separate timer FIQ path and the chosen IPI mechanism. UART success covers the exercised UART behavior; a sourced address or DT node is reference data rather than an implementation test.",
+      "exclusions": "One tested device does not certify all T8103 peripherals, a complete SoC, Linux/macOS boot or undocumented registers. CPU-internal semantics require their own ISA/Apple-profile evidence. See [Asahi and Linux peripheral sources](REFERENCES.md#p002-fidelity-evidence)."
+    },
+    {
+      "id": "machine-linux",
+      "title": "Whole-machine Linux compatibility",
+      "definition": "The selected J274/T8103 model runs an identified T8103-targeted Linux workload using the declared CPU, memory, interrupt and peripheral contracts together. Compatibility is bounded by kernel/configuration, DTB, initramfs or root filesystem, emulator revision, boot mode and observable workload.",
+      "evidence": "Reproduce a cold start with exact input versions or hashes, machine/CPU options, entry conditions, console log and workload result. Identify component evidence, stubs, unsupported devices and lab shortcuts. G4 concerns a BusyBox initramfs shell through Apple UART/AIC; G6 adds the specified persistent-storage path. P003 will define the G4 witness procedure.",
+      "exclusions": "A Linux witness does not prove every ISA feature or device, a different board, macOS, AGX graphics, timing fidelity or Apple's normal Boot ROM/iBoot/SEP startup. Laboratory direct loading must remain labelled. [Linux entry requirements](REFERENCES.md#p002-fidelity-evidence) are separate CPU and platform obligations."
+    },
+    {
+      "id": "machine-macos",
+      "title": "Whole-machine macOS compatibility",
+      "definition": "An independent exploratory compatibility claim for an exact macOS/XNU workload on the physical-target J274/T8103 model, with its own boot, CPU, device and firmware-interface assumptions. Distinguish kernel entry, completed boot, user space and graphics; each is a different bounded result.",
+      "evidence": "Any future claim must supply its own reproducible workload evidence, lawful input provenance, host/model/guest versions and explicit boot/security and device limitations. Neither a Linux run nor a QEMU VMApple guest substitutes for testing this target. No v0.1 gate awards this level.",
+      "exclusions": "Currently unimplemented and outside the v0.1 release requirement. Do not infer stock boot, SEP services, GUI or general application support from a lesser witness. [Apple boot security and QEMU VMApple references](REFERENCES.md#p002-fidelity-evidence) establish separate platform assumptions."
+    },
+    {
+      "id": "evidence-audit",
+      "title": "Evidence and release audit",
+      "definition": "A review or publication gate checks that the declared fidelity levels, source provenance, reproducibility records, limitations and release contents agree. This is an assurance classification, not an additional hardware capability.",
+      "evidence": "Inspect the versioned evidence for the named runtime gates, unresolved mismatches and exclusions, source and artifact provenance, sanitizer results and applicable redistribution notices. P364 audits the release; P365 publishes an independently verifiable acceptance record.",
+      "exclusions": "An audit, report, phase checkbox or passing metadata validator cannot promote untested behavior to implemented compatibility or grant any CPU, peripheral, Linux or macOS result."
+    }
+  ],
+  "gates": [
+    {
+      "id": "G0",
+      "kind": "development",
+      "levels": [
+        "toolchain"
+      ],
+      "test": "`ARM64 baseline OK` on QEMU `virt`",
+      "scope": "Generic ARM64 toolchain witness only; no Apple-target fidelity."
+    },
+    {
+      "id": "G1",
+      "kind": "development",
+      "levels": [
+        "isa",
+        "apple-cpu"
+      ],
+      "test": "Original ARM64 test ELF executes on new `apple-m1-lab` machine",
+      "scope": "Only exercised instructions and CPU/board skeleton paths; full ISA, Apple profile and device conformance remain separate."
+    },
+    {
+      "id": "G2",
+      "kind": "development",
+      "levels": [
+        "peripheral"
+      ],
+      "test": "Serial output via verified T8103 Apple UART MMIO",
+      "scope": "The exercised Apple UART register/serial subset; no complete-SoC claim."
+    },
+    {
+      "id": "G3",
+      "kind": "development",
+      "levels": [
+        "isa",
+        "apple-cpu",
+        "peripheral"
+      ],
+      "test": "AIC device IRQ, separate timer FIQ and two-core IPI acknowledge correctly",
+      "scope": "Only the tested interrupt, timer and two-core integration paths, with their individual CPU/device evidence."
+    },
+    {
+      "id": "G4",
+      "kind": "development",
+      "levels": [
+        "machine-linux"
+      ],
+      "test": "T8103-targeted Linux reaches BusyBox shell via Apple UART/AIC",
+      "scope": "v0.1 laboratory Linux initramfs workload on J274/T8103; no stock Apple firmware or macOS claim."
+    },
+    {
+      "id": "G5",
+      "kind": "development",
+      "levels": [
+        "peripheral"
+      ],
+      "test": "Sanitized M1 hardware traces match emulator device tests",
+      "scope": "Only device transitions covered by the named, versioned traces and tolerances; no automatic whole-machine certification."
+    },
+    {
+      "id": "G6",
+      "kind": "development",
+      "levels": [
+        "machine-linux",
+        "peripheral"
+      ],
+      "test": "Persistent root filesystem through ANS/NVMMU with required SART/RTKit initialization",
+      "scope": "The tested Linux persistent-storage path and its component evidence; no generic-DART substitution or full-device claim."
+    },
+    {
+      "id": "P361",
+      "kind": "release",
+      "levels": [
+        "isa",
+        "apple-cpu",
+        "peripheral"
+      ],
+      "test": "Independently reproduce G1/G2 on a fresh host; Apple machine runs its own UART ELF without generic `virt` substitution",
+      "scope": "Independent reproduction of the same bounded CPU/board/UART coverage, not comprehensive Apple CPU accuracy."
+    },
+    {
+      "id": "P362",
+      "kind": "release",
+      "levels": [
+        "isa",
+        "apple-cpu",
+        "peripheral"
+      ],
+      "test": "Independently reproduce G3 timers and two-core IPI protocol; no lost, duplicate or stuck interrupt remains",
+      "scope": "Reproduces the specified interrupt/SMP corpus and its CPU/device boundaries."
+    },
+    {
+      "id": "P363",
+      "kind": "release",
+      "levels": [
+        "machine-linux"
+      ],
+      "test": "Boot exact published T8103 kernel/image artifacts from cold reset; G4 reaches an interactive initramfs shell over Apple UART",
+      "scope": "Reproduces the declared Linux lab-boot workload only; no automatic macOS or firmware compatibility."
+    },
+    {
+      "id": "P364",
+      "kind": "release",
+      "levels": [
+        "evidence-audit"
+      ],
+      "test": "Audit fidelity, provenance, sanitizer results, limitations, GPL notices and excluded Apple blobs; no secrets or unsupported compatibility claims",
+      "scope": "Audit evidence supporting the claimed levels; does not implement or promote runtime behavior."
+    },
+    {
+      "id": "P365",
+      "kind": "release",
+      "levels": [
+        "evidence-audit"
+      ],
+      "test": "Publish reproducibility record, passed gates, open defects and future research queue; independent reviewer verifies evidence end to end",
+      "scope": "Publish achieved, scoped results and gaps without completing exploratory tracks or granting new compatibility."
+    }
+  ]
+}

@@ -16,6 +16,23 @@ Reviewed 2026-10-23. These immutable source snapshots establish names and scope;
 
 Linux identity evidence is pinned to the `v6.12` commit `adc218676eef25575469234709c2d87185ca223a`; Asahi documentation is pinned to `0d1f8917fa88745d62a4c05d802c4a7298c8616b`. Linux and Asahi reflect related upstream research, so their agreement is corroboration, not a claim of two independent hardware measurements. Apple corroborates the product identity. No physical-hardware experiment was needed or performed for P001.
 
+## P002 fidelity evidence
+
+Reviewed 2026-10-23. These sources support separating architectural behavior, Apple CPU details, peripherals and whole-machine workloads. The level names, evidence requirements and gate mappings in [the P002 contract](ARCHITECTURE.md#p002-fidelity-contract) are project policy inferred from those boundaries; the sources do not certify any implementation in this repository.
+
+| Primary source | Boundary supported |
+|---|---|
+| [Arm CPU architecture](https://www.arm.com/architecture/cpu) | The architectural contract covers instruction, exception and memory models; microarchitecture separately chooses pipeline, cache and performance implementation. A functional ISA result is not a cycle-timing result. Live vendor page; reviewed on the date above. |
+| [Asahi Apple system-register research](https://github.com/AsahiLinux/docs/blob/0d1f8917fa88745d62a4c05d802c4a7298c8616b/docs/hw/cpu/system-registers.md) | Apple HID/EHID and other implementation-defined registers are a distinct guest-visible surface alongside architectural ID registers. The research includes uncertainty and unknown registers; it is not a complete silicon specification. |
+| [Asahi AIC research](https://github.com/AsahiLinux/docs/blob/0d1f8917fa88745d62a4c05d802c4a7298c8616b/docs/hw/soc/aic.md) | Peripheral interrupt state and acknowledgment need device-specific testing; architectural timer delivery bypasses AIC and uses CPU FIQ. CPU execution and interrupt-controller correctness are separate obligations that meet in integration tests. |
+| [QEMU generic ARM virt platform](https://github.com/qemu/qemu/blob/4fc49f46dc95d4a27de2509e7fceb2931e91faeb/docs/system/arm/virt.rst) | This intentionally virtual platform does not model a physical machine. Its PL011/GIC interfaces cannot establish T8103 UART/AIC fidelity. The documentation also distinguishes CPU feature support from features requiring machine support. |
+| [QEMU VMApple model](https://github.com/qemu/qemu/blob/4fc49f46dc95d4a27de2509e7fceb2931e91faeb/docs/system/arm/vmapple.rst) | VMApple reproduces the Virtualization.framework device model, with documented Apple Silicon/macOS host requirements. That is a different target from physical J274/T8103 hardware. |
+| [QEMU TCG instruction counting](https://github.com/qemu/qemu/blob/4fc49f46dc95d4a27de2509e7fceb2931e91faeb/docs/devel/tcg-icount.rst) | Instruction counting and virtual time do not model actual per-instruction silicon timing. Determinism is not evidence of cycle accuracy. |
+| [Linux AArch64 boot protocol](https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/Documentation/arch/arm64/booting.rst) | Linux entry has independent RAM, device-tree, image and CPU-state conditions, including DMA quiescence. A reproducible whole-machine witness must identify its platform and boot assumptions. |
+| [Apple silicon boot process](https://support.apple.com/en-ca/guide/security/secac71d5623/web) | Apple describes Boot ROM, LLB, iBoot, firmware and LocalPolicy/Secure Enclave dependencies. A directly loaded Linux workload does not exercise that chain or establish macOS compatibility. Live vendor page; reviewed on the date above. |
+
+QEMU evidence is pinned to `4fc49f46dc95d4a27de2509e7fceb2931e91faeb` (`v11.1.2`), verified through the upstream repository. Asahi and Linux use the same immutable revisions recorded for P001. Pins are evidence snapshots, not a new implementation dependency or a completed upstream-foundation phase. No new hardware values, Apple firmware, register implementation or physical-machine measurement is introduced by P002.
+
 ## Other development references
 
 These are working references, not complete specifications. For each implemented register or device, record an exact upstream revision and independently verify behavior where possible.

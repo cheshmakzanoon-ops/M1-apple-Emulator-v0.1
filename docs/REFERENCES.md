@@ -54,6 +54,19 @@ Reviewed 2026-10-23. These primary sources support the source-observable profile
 
 The review caught the Linux serial-core hierarchy distinction and the difference between aggregate UART IRQ activity and proof of RX causality. The former is exercised with synthetic sysfs fixtures; the latter remains an explicit G2/G3 trace prerequisite. No counter/string in a fabricated transcript can authenticate a device model. No physical machine was modified or measured.
 
+## P004 exploratory scope evidence
+
+Reviewed 2026-10-23. P004 reuses the existing immutable QEMU and Asahi evidence revisions. These sources support distinctions between functional emulation, timing, graphics and physical-machine boot; they do not certify this project. The explicit v0.1 exclusions and promotion criteria are project policy.
+
+| Source ID | Primary evidence and relevance |
+|---|---|
+| `qemu-icount` | [Pinned QEMU instruction-counting documentation](https://github.com/qemu/qemu/blob/4fc49f46dc95d4a27de2509e7fceb2931e91faeb/docs/devel/tcg-icount.rst) separates executed instructions/virtual time from real microarchitectural instruction latency. P102/P344 results cannot establish cycle fidelity. |
+| `asahi-agx` | [Pinned Asahi AGX notes](https://github.com/AsahiLinux/docs/blob/0d1f8917fa88745d62a4c05d802c4a7298c8616b/docs/hw/soc/agx.md) describe the kernel-facing ASC/firmware, UAT, queue, work and event interfaces. The notes expressly exclude userspace shader/texture/pipeline details. A narrow device or framebuffer experiment does not establish a complete rendering stack. |
+| `apple-boot` | [Apple silicon boot process](https://support.apple.com/en-ca/guide/security/secac71d5623/web) describes Boot ROM, LLB, iBoot, firmware and LocalPolicy/Secure Enclave responsibilities. The laboratory Linux loader does not exercise that physical-machine chain. Live vendor page, reviewed on the date above. |
+| `qemu-vmapple` | [Pinned QEMU VMApple documentation](https://github.com/qemu/qemu/blob/4fc49f46dc95d4a27de2509e7fceb2931e91faeb/docs/system/arm/vmapple.rst) describes a Virtualization.framework-compatible device model, distinct from physical J274/T8103 hardware. Results on that virtual platform cannot validate the selected physical target. |
+
+No new addresses, timing constants, device behavior, firmware payloads or reference-machine measurements are introduced. The [P004 scope specification](EXPLORATORY_SCOPE.md) records bounded research and the evidence needed before any future scope change.
+
 ## Other development references
 
 These are working references, not complete specifications. For each implemented register or device, record an exact upstream revision and independently verify behavior where possible.

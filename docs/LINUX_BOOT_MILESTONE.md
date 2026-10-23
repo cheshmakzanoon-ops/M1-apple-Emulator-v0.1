@@ -2,6 +2,8 @@
 
 > Research target: Apple M1 (T8103/H13G); Mac mini (M1, 2020), J274.
 
+> v0.1 scope: cycle accuracy, GPU graphics and unmodified macOS are exploratory, unimplemented and not required.
+
 ## Status and acceptance boundary
 
 **G4 is the v0.1 functional success criterion: a T8103-targeted Linux kernel reaches an interactive BusyBox initramfs shell through Apple UART and Apple AIC.** It uses the custom `apple-m1-lab` machine, QEMU TCG and explicitly labelled laboratory direct loading. The architectural timer retains its separate FIQ route.
@@ -214,3 +216,7 @@ Keep one bundle per candidate revision: `inputs/` for source/config/build manife
 This workload has no persistent-storage requirement: ANS/NVMMU/SART/RTKit and a persistent root filesystem belong to G6. It bypasses Apple Boot ROM, iBoot, SEP and authenticated firmware startup. It does not demonstrate macOS, GPU graphics, complete M1 device coverage, all eight Linux CPUs, cycle accuracy, native performance or full ISA conformance. P004 and later phases retain their separate scope and acceptance checks.
 
 The hardware address registry remains reference-only. P003 implements no MMIO register, changes no hardware value and performs no physical-machine experiment. Its executable acceptance tooling is ready for the later implementation to exercise; its synthetic tests cannot award G4.
+
+## P004 scope boundary
+
+The [exploratory scope contract](EXPLORATORY_SCOPE.md) preserves every prerequisite and witness obligation above. Cycle accuracy, GPU graphics and unmodified macOS remain unimplemented and are not required for G4 or the v0.1 release. Correct functional timers, Apple UART/AIC behavior and the documented cold-boot evidence remain mandatory.

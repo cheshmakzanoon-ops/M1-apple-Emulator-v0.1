@@ -14,7 +14,7 @@ MAP_RELATIVE = Path("hardware/t8103.json")
 ENTRYPOINTS = (
     "README.md", "ROADMAP_365_PHASES.md", "AGENTS.md",
     "docs/ARCHITECTURE.md", "docs/DEVELOPMENT.md", "docs/REFERENCES.md",
-    "docs/LINUX_BOOT_MILESTONE.md",
+    "docs/LINUX_BOOT_MILESTONE.md", "docs/EXPLORATORY_SCOPE.md",
 )
 DECLARATION = "> Research target: Apple M1 (T8103/H13G); Mac mini (M1, 2020), J274."
 IDENTITY = {
@@ -114,7 +114,7 @@ def _declarations(text: str) -> list[str]:
 
 
 def validate_repository(root: Path = ROOT) -> list[str]:
-    """Check metadata and the explicit six-entrypoint declaration inventory."""
+    """Check metadata and the explicit project-entrypoint declaration inventory."""
     errors: list[str] = []
     path = root / MAP_RELATIVE
     try:

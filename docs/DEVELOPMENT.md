@@ -4,18 +4,19 @@
 
 ## Target and metadata checks
 
-Python 3.11+ and a POSIX host shell are sufficient for the P001 target check, P002 fidelity contract, P003 witness contract and synthetic regression suite. Run these commands from the repository root:
+Python 3.11+ and a POSIX host shell are sufficient for the P001 target check, P002 fidelity contract, P003 witness contract, P004 scope policy and synthetic regression suite. Run these commands from the repository root:
 
 ```sh
 python3 tools/validate_target.py
 python3 tools/validate_fidelity.py
 python3 tools/validate_boot_milestone.py
+python3 tools/validate_scope.py
 python3 tools/validate_hardware.py
 python3 tools/validate_roadmap.py
 python3 -m unittest discover -s tests -v
 ```
 
-The target validator checks the machine-readable identity and exclusions in `hardware/t8103.json` and the seven visible target declarations listed in the [P001 charter](ARCHITECTURE.md#p001-target-charter), including the P003 witness specification. It exits nonzero for missing, malformed or conflicting declarations. Its default paths are relative to the script, so invoking it by absolute path also works from another directory. `--root PATH` checks a separate repository snapshot without modifying it. The check is offline and does not inspect a physical Mac or prove device compatibility.
+The target validator checks the machine-readable identity and exclusions in `hardware/t8103.json` and the eight visible target declarations listed in the [P001 charter](ARCHITECTURE.md#p001-target-charter), including the P003 witness and P004 scope specifications. It exits nonzero for missing, malformed or conflicting declarations. Its default paths are relative to the script, so invoking it by absolute path also works from another directory. `--root PATH` checks a separate repository snapshot without modifying it. The check is offline and does not inspect a physical Mac or prove device compatibility.
 
 ## Fidelity policy check
 
@@ -32,6 +33,12 @@ This validates a published policy, not the truth of arbitrary prose, the authent
 The guest probe and serial-binding helper under `experiments/linux-boot-witness/` are inputs for the future P198 initramfs. `tools/check_g4_transcript.py` verifies a recorded serial exchange against independently recorded nonce/operand arguments. Its successful output means protocol consistency only. Read the [complete procedure](LINUX_BOOT_MILESTONE.md#reproducible-live-procedure) for required host event ordering, artifact hashes, three fresh processes, deadlines and independent G0–G3/device-route review.
 
 The T8103 machine and boot artifacts are still unavailable. Do not run the probe on the host as though it were an M1 test, substitute QEMU `virt`, or call a synthetic fixture a G4 pass. P209 supplies live capture/timeout enforcement and P210 certifies actual runtime evidence.
+
+## Exploratory scope check
+
+`python3 tools/validate_scope.py` checks the three exclusions in `docs/scope.json`, their [published specification](EXPLORATORY_SCOPE.md), all 12 named gate boundaries and the optional WS20/WS21 phase annotations. It also runs the P002/P003 contract validators and checks root/docs Markdown plus structured gate prose for explicit contradictory feature claims. `--root PATH` validates a separate snapshot. `render_contract(raw)` returns the expected specification block without writing files.
+
+The [scope-check regression suite](../tests/test_scope.py) exercises false capability promotion, coordinated gate/prose edits, malformed policy, hidden declarations, optional research completion and CLI errors. This bounded lint does not replace review or certify runtime success; P014 remains separate future work.
 
 ## Generic ARM64 baseline
 

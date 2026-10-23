@@ -2,6 +2,8 @@
 
 > Research target: Apple M1 (T8103/H13G); Mac mini (M1, 2020), J274.
 
+> v0.1 scope: cycle accuracy, GPU graphics and unmodified macOS are exploratory, unimplemented and not required.
+
 **Canonical project plan | Target: original M1 (T8103), Mac mini J274 | Host: Linux/WSL2 x86_64 | CPU: QEMU AArch64 TCG**
 
 This roadmap deliberately separates a runnable ARM64 toolchain from an Apple M1-compatible system. **P001–P003 are complete; P004–P365 remain unchecked.** See the [P001](docs/phases/P001.md), [P002](docs/phases/P002.md) and [P003 completion evidence](docs/phases/P003.md). P003 freezes the G4 witness; it does not mark G4 passed. A completed phase requires the check specified below, a commit, and the evidence described in `AGENTS.md`. The last five phases are independent formal release gates. The workstreams are dependency-ordered, although narrowly scoped investigation may happen in parallel without misreporting completed prerequisites.
@@ -235,7 +237,7 @@ Depends on: WS10. Outcome: reproducible interrupt-driven timekeeping.
 - [ ] **P162 — Test timer cancellation on reset** — Reset counter-related guest state and pending timer events correctly. **Check:** reboot cannot receive an old timer interrupt.
 - [ ] **P163 — Implement deterministic timer fixture** — Step virtual clock through specified deadlines with QTest. **Check:** observed timer FIQ timeline equals expected fixture.
 - [ ] **P164 — Compare guest delays against M1 behavior** — Characterize software-visible timer state with reference traces. **Check:** functional sequencing matches within declared tolerances.
-- [ ] **P165 — Gate timekeeping and interrupt integration** — Exercise timer FIQs alongside independently acknowledged AIC IRQs over thousands of cycles. **Check:** stable guest tick count, correct interrupt classes and no unexpected pending sources.
+- [ ] **P165 — Gate timekeeping and interrupt integration** — Exercise timer FIQs alongside independently acknowledged AIC IRQs over thousands of timer/IRQ iterations. **Check:** stable guest tick count, correct interrupt classes and no unexpected pending sources.
 
 ## WS12 — Heterogeneous multicore bring-up and SMP (P166–P180)
 
@@ -401,41 +403,41 @@ Depends on: WS18. Outcome: bounded, documented interfaces for auxiliary controll
 
 Depends on: WS14 and selected WS15/WS19 models. Outcome: research prototypes only, not required for v0.1.
 
-- [ ] **P286 — Define AGX fidelity levels** — Distinguish command submission, firmware protocol, shader execution and actual rendering. **Check:** public goals use precise compatibility terminology.
-- [ ] **P287 — Study Asahi/Mesa GPU source** — Build a source-linked inventory of publicly known command structures. **Check:** no undocumented packet is declared implemented.
-- [ ] **P288 — Research GPU virtual memory** — Characterize device-side address translation and synchronization. **Check:** a synthetic mapping test has explicit protection outcomes.
-- [ ] **P289 — Define GPU work submission model** — Specify queues, command buffers, fences and interrupts. **Check:** a deterministic test can submit and complete a no-op job.
-- [ ] **P290 — Implement skeletal AGX MMIO device** — Expose only verified discovery and status registers. **Check:** device reports honest partial implementation state.
-- [ ] **P291 — Research shader ISA behavior** — Inventory publicly reconstructed GPU instruction forms and gaps. **Check:** an instruction corpus identifies unsupported encodings.
-- [ ] **P292 — Prototype minimal shader decoding** — Parse a narrowly defined instruction subset into an intermediate representation. **Check:** decode/re-encode roundtrip preserves the supported bits.
-- [ ] **P293 — Evaluate software shader interpreter** — Execute a tiny arithmetic kernel without claiming general AGX support. **Check:** reference output values match for selected test vectors.
-- [ ] **P294 — Evaluate host GPU backend translation** — Compare Vulkan/other backend requirements against observable AGX behavior. **Check:** a written compatibility gap analysis supports the decision.
-- [ ] **P295 — Research display-controller protocols** — Map DCP/mailbox interactions, framebuffer and scanout ownership. **Check:** a documented minimal handshake can be isolated.
-- [ ] **P296 — Prototype virtual framebuffer path** — Expose a test framebuffer independent of full AGX shader support. **Check:** known pixel pattern is captured unambiguously.
-- [ ] **P297 — Model GPU fence and event completion** — Verify synchronization ordering for a tiny synthetic workload. **Check:** fence transitions occur in expected order.
-- [ ] **P298 — Establish graphics differential corpus** — Store only original shaders and expected synthetic outputs. **Check:** harness reports per-operation pass/fail independently.
-- [ ] **P299 — Assess media and neural engine boundaries** — Inventory publicly documented drivers versus unknown proprietary accelerators. **Check:** limitations are classified by required research effort.
-- [ ] **P300 — Publish a candid graphics feasibility report** — Summarize proven commands, untested interfaces and estimated missing work. **Check:** review finds no unsupported claim of functional AGX/macOS GUI.
+- [ ] **P286 — Define AGX fidelity levels** — Distinguish command submission, firmware protocol, shader execution and actual rendering. **Check:** public goals use precise compatibility terminology. **Scope:** exploratory; not required for v0.1.
+- [ ] **P287 — Study Asahi/Mesa GPU source** — Build a source-linked inventory of publicly known command structures. **Check:** no undocumented packet is declared implemented. **Scope:** exploratory; not required for v0.1.
+- [ ] **P288 — Research GPU virtual memory** — Characterize device-side address translation and synchronization. **Check:** a synthetic mapping test has explicit protection outcomes. **Scope:** exploratory; not required for v0.1.
+- [ ] **P289 — Define GPU work submission model** — Specify queues, command buffers, fences and interrupts. **Check:** a deterministic test can submit and complete a no-op job. **Scope:** exploratory; not required for v0.1.
+- [ ] **P290 — Implement skeletal AGX MMIO device** — Expose only verified discovery and status registers. **Check:** device reports honest partial implementation state. **Scope:** exploratory; not required for v0.1.
+- [ ] **P291 — Research shader ISA behavior** — Inventory publicly reconstructed GPU instruction forms and gaps. **Check:** an instruction corpus identifies unsupported encodings. **Scope:** exploratory; not required for v0.1.
+- [ ] **P292 — Prototype minimal shader decoding** — Parse a narrowly defined instruction subset into an intermediate representation. **Check:** decode/re-encode roundtrip preserves the supported bits. **Scope:** exploratory; not required for v0.1.
+- [ ] **P293 — Evaluate software shader interpreter** — Execute a tiny arithmetic kernel without claiming general AGX support. **Check:** reference output values match for selected test vectors. **Scope:** exploratory; not required for v0.1.
+- [ ] **P294 — Evaluate host GPU backend translation** — Compare Vulkan/other backend requirements against observable AGX behavior. **Check:** a written compatibility gap analysis supports the decision. **Scope:** exploratory; not required for v0.1.
+- [ ] **P295 — Research display-controller protocols** — Map DCP/mailbox interactions, framebuffer and scanout ownership. **Check:** a documented minimal handshake can be isolated. **Scope:** exploratory; not required for v0.1.
+- [ ] **P296 — Prototype virtual framebuffer path** — Expose a test framebuffer independent of full AGX shader support. **Check:** known pixel pattern is captured unambiguously. **Scope:** exploratory; not required for v0.1.
+- [ ] **P297 — Model GPU fence and event completion** — Verify synchronization ordering for a tiny synthetic workload. **Check:** fence transitions occur in expected order. **Scope:** exploratory; not required for v0.1.
+- [ ] **P298 — Establish graphics differential corpus** — Store only original shaders and expected synthetic outputs. **Check:** harness reports per-operation pass/fail independently. **Scope:** exploratory; not required for v0.1.
+- [ ] **P299 — Assess media and neural engine boundaries** — Inventory publicly documented drivers versus unknown proprietary accelerators. **Check:** limitations are classified by required research effort. **Scope:** exploratory; not required for v0.1.
+- [ ] **P300 — Publish a candid graphics feasibility report** — Summarize proven commands, untested interfaces and estimated missing work. **Check:** review finds no unsupported claim of functional AGX/macOS GUI. **Scope:** exploratory; not required for v0.1.
 
 ## WS21 — macOS and secure-boot compatibility: research only (P301–P315)
 
 Depends on: WS14 and legal/source review; not required by v0.1. Outcome: feasibility evidence, no false macOS boot claim.
 
-- [ ] **P301 — Review Apple macOS licensing** — Document host, virtualization and redistribution restrictions for contemplated tests. **Check:** proposed experiments have an explicit compliance review.
-- [ ] **P302 — Inventory Apple secure boot stages** — Describe Boot ROM, LLB/iBoot, LocalPolicy, SEP and firmware handoffs from primary sources. **Check:** dependency graph cites official documentation.
-- [ ] **P303 — Delineate emulator and firmware responsibility** — Define which boot stages would be modeled versus externally provided, lawfully obtained inputs. **Check:** architecture design never implies possession of Apple keys.
-- [ ] **P304 — Study kernelcache container structure** — Review publicly described Mach-O/IMG4 formats without distributing payloads. **Check:** documentation identifies exact research scope and legal constraints.
-- [ ] **P305 — Inventory XNU early-boot interfaces** — List hardware and boot arguments observed in documented XNU development paths. **Check:** missing peripherals have explicit issue records.
-- [ ] **P306 — Compare Linux versus XNU entry state** — Record differences in ADT, memory carveouts, privilege and system registers. **Check:** comparison names concrete incompatible assumptions.
-- [ ] **P307 — Analyze boot-policy trust dependencies** — Identify what cannot be reproduced merely by loading a kernel binary. **Check:** feasibility report separates cryptographic from functional requirements.
-- [ ] **P308 — Compare physical M1 and VMApple model** — Explain why QEMU `vmapple` guest hardware differs from a real T8103. **Check:** no design doc treats VMApple as an M1 SoC model.
-- [ ] **P309 — Model non-secret ADT fixture** — Create an original minimal ADT-like test tree where permitted. **Check:** fixture contains no machine identity or cryptographic material.
-- [ ] **P310 — Assess XNU CPU-specific register usage** — Classify implementation-defined registers required by early code. **Check:** every reported requirement is backed by disassembly or public source evidence.
-- [ ] **P311 — Assess SEP dependency surface** — Distinguish optional runtime services from security-policy requirements. **Check:** unsupported SEP protocols are not silently mocked as valid security claims.
-- [ ] **P312 — Assess display and GUI blockers** — Map AGX, DCP, WindowServer and framework expectations at a high level. **Check:** GUI scope is not confused with bare kernel execution.
-- [ ] **P313 — Form a lawful kernel research harness** — Specify tests restricted to appropriate Apple hosts or redistributable original payloads. **Check:** inputs are tracked with license/provenance metadata.
-- [ ] **P314 — Publish macOS feasibility risk assessment** — Quantify confidence and open unknowns without giving an unsupported completion date. **Check:** independent review can reproduce all factual claims.
-- [ ] **P315 — Decide whether to advance macOS exploration** — Require evidence that licensing and technical blockers are sufficiently understood. **Check:** documented go/no-go decision does not affect v0.1 release.
+- [ ] **P301 — Review Apple macOS licensing** — Document host, virtualization and redistribution restrictions for contemplated tests. **Check:** proposed experiments have an explicit compliance review. **Scope:** exploratory; not required for v0.1.
+- [ ] **P302 — Inventory Apple secure boot stages** — Describe Boot ROM, LLB/iBoot, LocalPolicy, SEP and firmware handoffs from primary sources. **Check:** dependency graph cites official documentation. **Scope:** exploratory; not required for v0.1.
+- [ ] **P303 — Delineate emulator and firmware responsibility** — Define which boot stages would be modeled versus externally provided, lawfully obtained inputs. **Check:** architecture design never implies possession of Apple keys. **Scope:** exploratory; not required for v0.1.
+- [ ] **P304 — Study kernelcache container structure** — Review publicly described Mach-O/IMG4 formats without distributing payloads. **Check:** documentation identifies exact research scope and legal constraints. **Scope:** exploratory; not required for v0.1.
+- [ ] **P305 — Inventory XNU early-boot interfaces** — List hardware and boot arguments observed in documented XNU development paths. **Check:** missing peripherals have explicit issue records. **Scope:** exploratory; not required for v0.1.
+- [ ] **P306 — Compare Linux versus XNU entry state** — Record differences in ADT, memory carveouts, privilege and system registers. **Check:** comparison names concrete incompatible assumptions. **Scope:** exploratory; not required for v0.1.
+- [ ] **P307 — Analyze boot-policy trust dependencies** — Identify what cannot be reproduced merely by loading a kernel binary. **Check:** feasibility report separates cryptographic from functional requirements. **Scope:** exploratory; not required for v0.1.
+- [ ] **P308 — Compare physical M1 and VMApple model** — Explain why QEMU `vmapple` guest hardware differs from a real T8103. **Check:** no design doc treats VMApple as an M1 SoC model. **Scope:** exploratory; not required for v0.1.
+- [ ] **P309 — Model non-secret ADT fixture** — Create an original minimal ADT-like test tree where permitted. **Check:** fixture contains no machine identity or cryptographic material. **Scope:** exploratory; not required for v0.1.
+- [ ] **P310 — Assess XNU CPU-specific register usage** — Classify implementation-defined registers required by early code. **Check:** every reported requirement is backed by disassembly or public source evidence. **Scope:** exploratory; not required for v0.1.
+- [ ] **P311 — Assess SEP dependency surface** — Distinguish optional runtime services from security-policy requirements. **Check:** unsupported SEP protocols are not silently mocked as valid security claims. **Scope:** exploratory; not required for v0.1.
+- [ ] **P312 — Assess display and GUI blockers** — Map AGX, DCP, WindowServer and framework expectations at a high level. **Check:** GUI scope is not confused with bare kernel execution. **Scope:** exploratory; not required for v0.1.
+- [ ] **P313 — Form a lawful kernel research harness** — Specify tests restricted to appropriate Apple hosts or redistributable original payloads. **Check:** inputs are tracked with license/provenance metadata. **Scope:** exploratory; not required for v0.1.
+- [ ] **P314 — Publish macOS feasibility risk assessment** — Quantify confidence and open unknowns without giving an unsupported completion date. **Check:** independent review can reproduce all factual claims. **Scope:** exploratory; not required for v0.1.
+- [ ] **P315 — Decide whether to advance macOS exploration** — Require evidence that licensing and technical blockers are sufficiently understood. **Check:** documented go/no-go decision does not affect v0.1 release. **Scope:** exploratory; not required for v0.1.
 
 ## WS22 — Silicon differential validation and research tooling (P316–P330)
 
@@ -501,7 +503,7 @@ Depends on: core gates G0–G4 and evidence work. Outcome: trustworthy, maintain
 
 Each gate below declares its independent fidelity level(s) from the [P002 fidelity contract](docs/ARCHITECTURE.md#p002-fidelity-contract). These labels describe the scope of required evidence, not a passed result.
 
-These last gates do not grant automatic completion of exploratory WS20/WS21. They verify that the **headless M1 research release** is honest, reproducible and safe.
+The [P004 scope contract](docs/EXPLORATORY_SCOPE.md) excludes cycle accuracy, GPU graphics and unmodified macOS from every named gate. These last gates do not grant automatic completion of exploratory WS20/WS21. They verify that the **headless M1 research release** is honest, reproducible and safe.
 
 - [ ] **P361 — Independently reproduce CPU and board gates** — Execute G1/G2 on a fresh host with source-linked T8103 map. **Check:** Apple machine runs its own UART ELF without generic `virt` substitution. **Fidelity:** `isa`, `apple-cpu`, `peripheral`.
 - [ ] **P362 — Independently reproduce interrupts and SMP** — Run G3 with timers and two-core IPI protocol in isolation. **Check:** no lost, duplicate or stuck interrupt remains. **Fidelity:** `isa`, `apple-cpu`, `peripheral`.

@@ -11,6 +11,7 @@
 - Preserve the P001 target charter and its declared identity in all documented project entrypoints; run `python3 tools/validate_target.py` when changing target metadata or entrypoint documentation. Add any new project overview/setup entrypoint to the validator's inventory.
 - Preserve the P002 fidelity definitions and all G0–G6/P361–P365 classifications in `docs/fidelity.json`, the architecture and the roadmap. Run `python3 tools/validate_fidelity.py` after scope or gate changes; labels alone never establish a passed runtime gate.
 - Preserve the P003 G4 boot contract in `docs/boot-milestone.json` and `docs/LINUX_BOOT_MILESTONE.md`; run `python3 tools/validate_boot_milestone.py`. A contract check or synthetic transcript cannot certify a cold Linux boot. Changes to the source-observable profile require source review and matching probe/checker regressions.
+- Preserve the P004 exploratory exclusions in `docs/scope.json` and `docs/EXPLORATORY_SCOPE.md`; run `python3 tools/validate_scope.py`. Cycle accuracy, GPU graphics and unmodified macOS remain outside required v0.1 scope and unimplemented. Narrow research completion must not promote them to shipped capabilities.
 
 ## Non-negotiable correctness rules
 
@@ -26,6 +27,6 @@
 
 - Build succeeds on supported Linux host or the known unavailable dependency is documented.
 - Focused tests cover both expected and edge-case behavior.
-- All checks pass: `python3 -m unittest discover -s tests -v`, `python3 tools/validate_target.py`, `python3 tools/validate_fidelity.py`, `python3 tools/validate_boot_milestone.py`, `python3 tools/validate_roadmap.py`, and `python3 tools/validate_hardware.py`.
+- All checks pass: `python3 -m unittest discover -s tests -v`, `python3 tools/validate_target.py`, `python3 tools/validate_fidelity.py`, `python3 tools/validate_boot_milestone.py`, `python3 tools/validate_scope.py`, `python3 tools/validate_roadmap.py`, and `python3 tools/validate_hardware.py`.
 - A short completion note records evidence, deviations, known limitations, and the relevant phase identifier.
 - Status is honest: a failing or untested component is never described as implemented.

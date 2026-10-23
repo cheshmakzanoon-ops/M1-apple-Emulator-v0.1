@@ -2,6 +2,8 @@
 
 > Research target: Apple M1 (T8103/H13G); Mac mini (M1, 2020), J274.
 
+> v0.1 scope: cycle accuracy, GPU graphics and unmodified macOS are exploratory, unimplemented and not required.
+
 ## P001 target charter
 
 The first machine is the **original Apple M1 SoC in the 2020 Mac mini board J274**. This selection is a project requirement, not a claim of implemented compatibility. `hardware/t8103.json` is the machine-readable identity record; the following names refer to different layers of that one target.
@@ -38,7 +40,7 @@ Generic QEMU `virt` remains a toolchain experiment with different peripherals. Q
 
 ### Entrypoint consistency contract
 
-The project overview/setup entrypoints are `README.md`, `ROADMAP_365_PHASES.md`, `AGENTS.md`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/REFERENCES.md` and `docs/LINUX_BOOT_MILESTONE.md`. Each has one visible research-target declaration near the top. `hardware/t8103.json` carries the structured identity, source references and exclusions. P003 adds the witness specification to this inventory; the original six declarations are preserved.
+The project overview/setup entrypoints are `README.md`, `ROADMAP_365_PHASES.md`, `AGENTS.md`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/REFERENCES.md`, `docs/LINUX_BOOT_MILESTONE.md` and `docs/EXPLORATORY_SCOPE.md`. Each has one visible research-target declaration near the top. `hardware/t8103.json` carries the structured identity, source references and exclusions. P003 adds the witness specification and P004 adds the exploratory scope specification; all eight target declarations are checked.
 
 Run `python3 tools/validate_target.py` to check those declarations against the frozen P001 identity. The check also rejects malformed identity data, a missing source, altered compatible values and incomplete or contradictory exclusions. It reports paths/fields and exits nonzero on failure; CI runs it alongside the existing roadmap, hardware and unit checks. The regression suite mutates the metadata and each entrypoint to verify that failures are detected.
 
@@ -122,6 +124,12 @@ Examples of bounded claims:
 - A G4 lab-boot shell is `machine-linux` evidence for the exact J274/T8103 configuration and artifacts. It cannot award `machine-macos`, Apple firmware-chain compatibility or graphics support.
 
 Unknown or stubbed behavior remains explicitly bounded. A gate label is never evidence by itself, and an audit cannot turn an untested component into a working one.
+
+## P004 exploratory non-goals
+
+[Exploratory scope](EXPLORATORY_SCOPE.md) and [scope.json](scope.json) isolate cycle accuracy, GPU graphics and unmodified macOS from the headless v0.1 requirement. All three remain unimplemented, and none is credited by G0–G6 or P361–P365. The validator checks each named gate, the visible declarations and the optional status of WS20/WS21, and lints explicit contradictory claims in repository documentation.
+
+Functional CPU/device behavior and observable timer correctness remain obligations. Instruction counting and performance reports do not establish silicon timing. A queue, shader subset or independent framebuffer experiment does not establish general AGX rendering. A Linux or isolated kernel-entry witness does not establish an unmodified macOS system. Limited future experiments retain their own evidence boundaries; the P315 research decision cannot block v0.1. See the specification for the precise limits of the automated audit.
 
 ## Scope
 

@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "phase": "P003",
+  "gate": "G4",
+  "fidelity": ["machine-linux"],
+  "success_criterion": "T8103-targeted Linux reaches BusyBox shell via Apple UART/AIC",
+  "target": {
+    "soc": "T8103",
+    "board": "J274",
+    "machine": "apple-m1-lab",
+    "accelerator": "tcg",
+    "boot_mode": "laboratory-direct",
+    "architecture": "aarch64",
+    "linux_compatible": ["apple,j274", "apple,t8103", "apple,arm-platform"],
+    "console": "ttySAC0",
+    "serial_driver": "samsung-uart",
+    "root_filesystem": "BusyBox initramfs"
+  },
+  "prerequisites": [
+    {
+      "id": "G0",
+      "phases": ["P016-P045"],
+      "evidence": "Identified host and cross tools reproduce the generic ARM64 smoke test; this is toolchain evidence only."
+    },
+    {
+      "id": "G1",
+      "phases": ["P046-P120"],
+      "evidence": "Tested Apple CPU profile and T8103 board execute the original ELF; record feature exposure, RAM, reset state and all stubs."
+    },
+    {
+      "id": "G2",
+      "phases": ["P121-P135"],
+      "evidence": "Apple UART TX, RX, FIFO and IRQ regressions pass; reviewed trace establishes host RX to UART to AIC delivery and acknowledgment."
+    },
+    {
+      "id": "G3",
+      "phases": ["P136-P180"],
+      "evidence": "AIC device IRQ, separate architectural timer FIQ and two-core IPI acknowledgment pass independently; a one-core Linux witness does not waive this prerequisite."
+    },
+    {
+      "id": "boot-handoff",
+      "phases": ["P181-P195"],
+      "evidence": "Entry-state probe, reviewed FDT, nonoverlapping image/initramfs/RAM reservations and explicit clock, power and firmware-state assumptions pass together."
+    },
+    {
+      "id": "linux-integration",
+      "phases": ["P196-P209"],
+      "evidence": "Pinned source/configuration/patches, deterministic initramfs, active Apple drivers, scheduler, serial shell and bounded fresh-process capture are reproducible."
+    }
+  ],
+  "witness": {
+    "profile": "linux-v6.12-observables-v1",
+    "guest_script": "experiments/linux-boot-witness/probe.sh",
+    "checker": "tools/check_g4_transcript.py",
+    "guest_script_path": "/g4-probe.sh",
+    "binding_helper": "experiments/linux-boot-witness/serial-binding.sh",
+    "binding_helper_path": "/g4-serial-binding.sh",
+    "cold_boots": 3,
+    "online_cpus": 1,
+    "boot_timeout_seconds": 300,
+    "interaction_timeout_seconds": 30,
+    "guest_sleep_seconds": 1,
+    "nonce_hex_characters": 32,
+    "operand_min": 1,
+    "operand_max": 999999,
+    "shell_followup": "product-after-probe",
+    "uart_irq_chip": "AIC",
+    "uart_irq_action": "235200000.serial",
+    "timer_irq_chip": "AIC-FIQ",
+    "timer_irq_action": "arch_timer"
+  },
+  "observations": [
+    {"id": "fresh-process", "requirement": "Three independent cold QEMU processes use identical hashed inputs and unique challenges; no snapshot, migration restore or recycled console log."},
+    {"id": "interactive-shell", "requirement": "After READY the host sends a fresh nonce and two operands through Apple UART; the probe returns their sum, exits, and a second command through the returned shell produces their product after END."},
+    {"id": "active-drivers", "requirement": "Guest reports aarch64, exact J274/T8103 compatible sequence, ttySAC0 as active console, samsung-uart binding and one online CPU."},
+    {"id": "uart-irq", "requirement": "Raw before/after interrupt snapshots retain the same AIC UART row and show increased activity across the input exchange; G2/G3 trace supplies RX causality."},
+    {"id": "timer-fiq", "requirement": "The separate AIC-FIQ arch_timer row advances and guest uptime advances at least one second across sleep; G3 independently proves the hardware FIQ route."},
+    {"id": "bounded-run", "requirement": "A monotonic host deadline covers startup and each exchange; timeout, premature process exit, panic, malformed or missing response and hash mismatch fail."},
+    {"id": "reviewed-evidence", "requirement": "Full serial, host-input events, emulator stderr, command, manifests, input hashes and prerequisite traces are retained and independently reviewed at P210."}
+  ],
+  "evidence_fields": {
+    "source": ["repository_url", "commit", "patch_series_sha256", "configuration_sha256"],
+    "artifact": ["relative_path", "size_bytes", "sha256"],
+    "host": ["os", "architecture", "compiler_versions", "build_commands", "environment"],
+    "invocation": ["argv", "cwd", "machine", "cpu_profile", "memory_layout", "boot_mode", "kernel_cmdline", "entry_state", "device_inventory", "shortcuts"],
+    "prerequisite": ["id", "revision", "command", "result", "evidence_sha256", "limitations"],
+    "run": ["id", "fresh_process", "nonce", "left", "right", "serial_sha256", "host_events_sha256", "stderr_sha256", "elapsed_seconds", "termination_reason", "checker_result"],
+    "review": ["reviewer", "date", "prerequisite_review", "device_route_review", "limitations", "verdict"]
+  },
+  "required_artifacts": [
+    "qemu-binary", "linux-image", "linux-config", "linux-patch-series", "dtb", "dt-sources", "dt-patch-series",
+    "busybox-binary", "busybox-config", "initramfs", "init-script", "probe-script", "serial-binding-script", "build-manifest"
+  ],
+  "excluded_substitutes": ["virt", "vmapple", "PL011", "GIC", "virtio-console", "semihosting-console", "snapshot-resume", "host-root-filesystem"],
+  "sources": {
+    "linux_boot": "https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/Documentation/arch/arm64/booting.rst",
+    "linux_j274": "https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/arch/arm64/boot/dts/apple/t8103-j274.dts",
+    "linux_t8103": "https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/arch/arm64/boot/dts/apple/t8103.dtsi",
+    "linux_uart": "https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/drivers/tty/serial/samsung_tty.c",
+    "linux_serial_core": "https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/drivers/tty/serial/serial_core.c",
+    "linux_serial_bus": "https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/drivers/tty/serial/serial_base_bus.c",
+    "linux_irq_proc": "https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/kernel/irq/proc.c",
+    "linux_aic": "https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/drivers/irqchip/irq-apple-aic.c",
+    "linux_timer": "https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/drivers/clocksource/arm_arch_timer.c",
+    "linux_initramfs": "https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/Documentation/filesystems/ramfs-rootfs-initramfs.rst",
+    "asahi_aic": "https://github.com/AsahiLinux/docs/blob/0d1f8917fa88745d62a4c05d802c4a7298c8616b/docs/hw/soc/aic.md",
+    "busybox": "https://busybox.net/downloads/BusyBox.html"
+  }
+}

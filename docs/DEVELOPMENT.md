@@ -4,17 +4,18 @@
 
 ## Target and metadata checks
 
-Python 3.11+ is sufficient for the P001 target check, P002 fidelity contract and metadata regression suite. Run these commands from the repository root:
+Python 3.11+ and a POSIX host shell are sufficient for the P001 target check, P002 fidelity contract, P003 witness contract and synthetic regression suite. Run these commands from the repository root:
 
 ```sh
 python3 tools/validate_target.py
 python3 tools/validate_fidelity.py
+python3 tools/validate_boot_milestone.py
 python3 tools/validate_hardware.py
 python3 tools/validate_roadmap.py
 python3 -m unittest discover -s tests -v
 ```
 
-The target validator checks the machine-readable identity and exclusions in `hardware/t8103.json` and the six visible target declarations listed in the [P001 charter](ARCHITECTURE.md#p001-target-charter). It exits nonzero for missing, malformed or conflicting declarations. Its default paths are relative to the script, so invoking it by absolute path also works from another directory. `--root PATH` checks a separate repository snapshot without modifying it. The check is offline and does not inspect a physical Mac or prove device compatibility.
+The target validator checks the machine-readable identity and exclusions in `hardware/t8103.json` and the seven visible target declarations listed in the [P001 charter](ARCHITECTURE.md#p001-target-charter), including the P003 witness specification. It exits nonzero for missing, malformed or conflicting declarations. Its default paths are relative to the script, so invoking it by absolute path also works from another directory. `--root PATH` checks a separate repository snapshot without modifying it. The check is offline and does not inspect a physical Mac or prove device compatibility.
 
 ## Fidelity policy check
 
@@ -22,7 +23,15 @@ The target validator checks the machine-readable identity and exclusions in `har
 
 The checker uses no third-party packages or network and supports `--root PATH`, including invocation from another working directory. Edit the manifest and its published definitions/tables together when the reviewed policy changes. The pure rendering helpers `render_levels(raw)` and `render_gates(raw, kind)` in the validator produce the expected Markdown from valid JSON; they do not write files. Additions or changes to gate scope also need the validator's explicit inventory and regression tests reviewed. `machine-macos` is defined for claim separation and is awarded by no v0.1 gate.
 
-This validates a published policy, not the truth of arbitrary prose, the authenticity of linked sources or runtime compatibility. It does not boot a guest, compare silicon or mark gates passed. P003 retains responsibility for the reproducible Linux witness specification.
+This validates a published policy, not the truth of arbitrary prose, the authenticity of linked sources or runtime compatibility. It does not boot a guest, compare silicon or mark gates passed. P003 supplies the [reproducible Linux witness specification](LINUX_BOOT_MILESTONE.md).
+
+## Linux milestone and witness checks
+
+`docs/boot-milestone.json` freezes the G4 target, prerequisites, test limits, required observations and evidence inventory. `tools/validate_boot_milestone.py` checks the schema, bounded scope, immutable source profile and matching visible specification. It also supports `--root PATH` and invocation from another directory. The shell/protocol tests are synthetic and require neither QEMU nor a guest image; they exercise malformed evidence, missing dependencies, serial-core device ancestry, arithmetic challenges and UART/timer distinctions.
+
+The guest probe and serial-binding helper under `experiments/linux-boot-witness/` are inputs for the future P198 initramfs. `tools/check_g4_transcript.py` verifies a recorded serial exchange against independently recorded nonce/operand arguments. Its successful output means protocol consistency only. Read the [complete procedure](LINUX_BOOT_MILESTONE.md#reproducible-live-procedure) for required host event ordering, artifact hashes, three fresh processes, deadlines and independent G0–G3/device-route review.
+
+The T8103 machine and boot artifacts are still unavailable. Do not run the probe on the host as though it were an M1 test, substitute QEMU `virt`, or call a synthetic fixture a G4 pass. P209 supplies live capture/timeout enforcement and P210 certifies actual runtime evidence.
 
 ## Generic ARM64 baseline
 

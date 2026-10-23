@@ -38,7 +38,7 @@ Generic QEMU `virt` remains a toolchain experiment with different peripherals. Q
 
 ### Entrypoint consistency contract
 
-The project overview/setup entrypoints are `README.md`, `ROADMAP_365_PHASES.md`, `AGENTS.md`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md` and `docs/REFERENCES.md`. Each has one visible research-target declaration near the top. `hardware/t8103.json` carries the structured identity, source references and exclusions.
+The project overview/setup entrypoints are `README.md`, `ROADMAP_365_PHASES.md`, `AGENTS.md`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/REFERENCES.md` and `docs/LINUX_BOOT_MILESTONE.md`. Each has one visible research-target declaration near the top. `hardware/t8103.json` carries the structured identity, source references and exclusions. P003 adds the witness specification to this inventory; the original six declarations are preserved.
 
 Run `python3 tools/validate_target.py` to check those declarations against the frozen P001 identity. The check also rejects malformed identity data, a missing source, altered compatible values and incomplete or contradictory exclusions. It reports paths/fields and exits nonzero on failure; CI runs it alongside the existing roadmap, hardware and unit checks. The regression suite mutates the metadata and each entrypoint to verify that failures are detected.
 
@@ -88,7 +88,7 @@ These are project acceptance requirements derived from the [primary-source disti
 
 **Definition:** The selected J274/T8103 model runs an identified T8103-targeted Linux workload using the declared CPU, memory, interrupt and peripheral contracts together. Compatibility is bounded by kernel/configuration, DTB, initramfs or root filesystem, emulator revision, boot mode and observable workload.
 
-**Required evidence:** Reproduce a cold start with exact input versions or hashes, machine/CPU options, entry conditions, console log and workload result. Identify component evidence, stubs, unsupported devices and lab shortcuts. G4 concerns a BusyBox initramfs shell through Apple UART/AIC; G6 adds the specified persistent-storage path. P003 will define the G4 witness procedure.
+**Required evidence:** Reproduce a cold start with exact input versions or hashes, machine/CPU options, entry conditions, console log and workload result. Identify component evidence, stubs, unsupported devices and lab shortcuts. G4 concerns a BusyBox initramfs shell through Apple UART/AIC; G6 adds the specified persistent-storage path. P003 defines the [G4 witness procedure](LINUX_BOOT_MILESTONE.md).
 
 **Does not establish:** A Linux witness does not prove every ISA feature or device, a different board, macOS, AGX graphics, timing fidelity or Apple's normal Boot ROM/iBoot/SEP startup. Laboratory direct loading must remain labelled. [Linux entry requirements](REFERENCES.md#p002-fidelity-evidence) are separate CPU and platform obligations.
 
@@ -170,6 +170,14 @@ Do not attach every DMA-capable device to DART by analogy. T8103 ANS has an embe
 **macOS:** Separate exploratory track outside v0.1. QEMU `vmapple` virtual-machine support is not a physical T8103 model and requires an Apple Silicon macOS host in its documented configuration.
 
 ## Measurable development gates
+
+### P003 Linux boot contract
+
+The [G4 witness specification](LINUX_BOOT_MILESTONE.md) freezes the v0.1 Linux success criterion, G0–G3 and boot/integration prerequisites, exact artifact/provenance requirements, a bounded two-command serial workload and three independent cold starts. The guest probe checks the real UART association, target identity, active console, UART IRQ activity and separate timer-FIQ progress. Its offline checker requires a fresh challenge's computed sum followed by a product command through the returned interactive shell. The [machine-readable contract](boot-milestone.json) and visible specification are checked by `tools/validate_boot_milestone.py`.
+
+This is a specification/tooling result. No T8103 Linux boot has been run or certified; the live runner and actual artifacts remain P194–P209 responsibilities, with P210 certification. Synthetic transcript/sysfs tests do not award G4. The one-CPU initial Linux profile does not waive G3's two-core IPI prerequisite. Neither string matching nor interrupt totals replace independent device traces and review.
+
+### Development gate inventory
 
 The observable tests retain their original scope. The fidelity column declares the limited kind of evidence each gate may establish when its test actually passes. No runtime gate is marked passed by this table.
 

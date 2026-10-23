@@ -33,6 +33,27 @@ Reviewed 2026-10-23. These sources support separating architectural behavior, Ap
 
 QEMU evidence is pinned to `4fc49f46dc95d4a27de2509e7fceb2931e91faeb` (`v11.1.2`), verified through the upstream repository. Asahi and Linux use the same immutable revisions recorded for P001. Pins are evidence snapshots, not a new implementation dependency or a completed upstream-foundation phase. No new hardware values, Apple firmware, register implementation or physical-machine measurement is introduced by P002.
 
+## P003 Linux witness evidence
+
+Reviewed 2026-10-23. These primary sources support the source-observable profile and boot prerequisites in [the G4 witness specification](LINUX_BOOT_MILESTONE.md). The one-CPU profile, three trials, challenges and timeout budgets are project acceptance choices, not hardware facts. Linux source observations retain the immutable v6.12 revision above. Building/selecting the actual Linux/BusyBox inputs remains P196–P198 work.
+
+| Source ID | Primary source and supported observation |
+|---|---|
+| `linux_boot` | [Pinned AArch64 boot protocol](https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/Documentation/arch/arm64/booting.rst), also [rendered for 6.12](https://docs.kernel.org/6.12/arch/arm64/booting.html): image placement, FDT/register handoff, privilege/MMU/cache/timer state, reservations and DMA quiescence. |
+| `linux_j274` | [J274 DTS](https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/arch/arm64/boot/dts/apple/t8103-j274.dts): root target compatibles and board-specific enabled devices. |
+| `linux_t8103` | [T8103 DTSI](https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/arch/arm64/boot/dts/apple/t8103.dtsi): Apple UART/AIC/timer connections and UART clock/power dependencies. Linux's UART node window and the broader reference-map survey are different scopes; P003 changes neither. |
+| `linux_uart` | [Samsung/Apple serial driver](https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/drivers/tty/serial/samsung_tty.c): `apple,s5l-uart`, `ttySAC` naming, physical `samsung-uart` driver and platform-device-named IRQ action. [Serial Kconfig](https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/drivers/tty/serial/Kconfig) describes built-in serial/console options. |
+| `linux_serial_core` | [Serial core](https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/drivers/tty/serial/serial_core.c): the tty registration uses the serial port device as parent, not necessarily the physical UART. |
+| `linux_serial_bus` | [Serial base bus](https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/drivers/tty/serial/serial_base_bus.c): controller and port devices are nested below the physical device. The witness must check ancestry and the physical driver, rather than a guessed parent depth. |
+| `linux_aic` | [Apple AIC driver](https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/drivers/irqchip/irq-apple-aic.c): separate `AIC` and `AIC-FIQ` irqchip names; platform-specific initialization obligations. |
+| `linux_timer` | [Architectural timer driver](https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/drivers/clocksource/arm_arch_timer.c): `arch_timer` action names and per-CPU interrupt setup. |
+| `linux_irq_proc` | [IRQ proc output](https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/kernel/irq/proc.c): CPU columns, unsigned counters, chip/hardware-IRQ fields and action names. Runtime virtual IRQ numbers are not hardware constants. |
+| `linux_initramfs` | [Initramfs documentation](https://github.com/torvalds/linux/blob/adc218676eef25575469234709c2d87185ca223a/Documentation/filesystems/ramfs-rootfs-initramfs.rst), also [rendered for 6.12](https://docs.kernel.org/6.12/filesystems/ramfs-rootfs-initramfs.html): RAM-backed root, `/init` and cpio generation/file lists. [Reproducible builds](https://docs.kernel.org/6.12/kbuild/reproducible-builds.html) identifies additional toolchain/environment controls. |
+| `asahi_aic` | [Pinned Asahi AIC research](https://github.com/AsahiLinux/docs/blob/0d1f8917fa88745d62a4c05d802c4a7298c8616b/docs/hw/soc/aic.md): device-source masking/acknowledgment and architectural timers bypassing AIC for CPU FIQ. |
+| `busybox` | [Official BusyBox applet reference](https://busybox.net/downloads/BusyBox.html): small shell/system utilities for the guest probe and init. This live reference has no immutable version; actual BusyBox source/configuration/binary hashes are mandatory future evidence, not supplied runtime results. |
+
+The review caught the Linux serial-core hierarchy distinction and the difference between aggregate UART IRQ activity and proof of RX causality. The former is exercised with synthetic sysfs fixtures; the latter remains an explicit G2/G3 trace prerequisite. No counter/string in a fabricated transcript can authenticate a device model. No physical machine was modified or measured.
+
 ## Other development references
 
 These are working references, not complete specifications. For each implemented register or device, record an exact upstream revision and independently verify behavior where possible.

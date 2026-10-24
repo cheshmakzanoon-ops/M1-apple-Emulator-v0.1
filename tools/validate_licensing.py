@@ -41,9 +41,11 @@ REQUIRED_DEPENDENCIES = {
 }
 REVIEWED_INPUTS = {
     ".github/workflows/verify.yml",
+    "CONTRIBUTING.md",
     "docs/DEVELOPMENT.md",
     "tools/setup_qemu.sh",
     "tools/run_arm64_smoke.py",
+    "tools/validate_branch_policy.py",
     "experiments/arm64-virt-smoke/Makefile",
     "experiments/linux-boot-witness/probe.sh",
     "experiments/linux-boot-witness/serial-binding.sh",
@@ -227,7 +229,7 @@ def validate(raw: object) -> list[str]:
             if identifier not in identifiers:
                 errors.append(f"{location}.dependencies: unknown dependency {identifier}")
     if set(input_paths) != REVIEWED_INPUTS:
-        errors.append("review_inputs: all seven reviewed declaration/build/runner inputs are required")
+        errors.append(f"review_inputs: all {len(REVIEWED_INPUTS)} reviewed declaration/build/runner inputs are required")
     return errors
 
 

@@ -2,7 +2,7 @@
 
 > Research target: Apple M1 (T8103/H13G); Mac mini (M1, 2020), J274.
 
-**Review date:** 2026-10-23. **Scope:** the project source tree and its declared direct development inputs. The canonical P006 requirement is to distinguish MIT project-authored files, future GPL QEMU-derived code and Apple proprietary assets, and pass a dependency and redistribution review. This is a bounded engineering review, not a legal certificate or a complete transitive software bill of materials.
+**Review date:** 2026-10-24 (P007 extension of the 2026-10-23 P006 review). **Scope:** the project source tree and its declared direct development inputs. The canonical P006 requirement is to distinguish MIT project-authored files, future GPL QEMU-derived code and Apple proprietary assets, and pass a dependency and redistribution review. This is a bounded engineering review, not a legal certificate or a complete transitive software bill of materials.
 
 The reviewed repository distributes project-authored text sources, documentation, metadata and standalone experiments. It does not vendor QEMU or distribute a QEMU executable, Linux/BusyBox guest image, m1n1 build, Apple firmware, Boot ROM or operating-system image. Local installation or configuration of an external tool is recorded separately from redistribution. This phase implements no Apple CPU or device and awards no runtime fidelity gate.
 
@@ -25,6 +25,8 @@ The QEMU evidence revision is `4fc49f46dc95d4a27de2509e7fceb2931e91faeb`, associ
 ## Declared direct dependency review
 
 The table covers the acquisition and execution inputs declared by the current workflow, developer setup instructions and QEMU setup script. None is vendored or bundled in the project source distribution. The corresponding reviewed input hashes in `licensing.json` make changes to those declarations require another review.
+
+P007 adds four original project files: the contribution guide, branch-policy validator, regression tests and phase report. Its guide reuses the existing external Git/Python/POSIX-host and generic ARM64 toolchain; `tar` exports sources locally and the new validator only reads local Git state. These tools remain separately installed and are not redistributed. The guide and validator are two additional reviewed input surfaces, bringing the current digest inventory to nine. The changed CI and development instructions were reviewed again; package/action versions and acquisition commands are unchanged. No upstream code or prose is copied and no new runtime, firmware or guest dependency is introduced.
 
 | Declared input | Where and why it is used | Current licensing disposition |
 |---|---|---|

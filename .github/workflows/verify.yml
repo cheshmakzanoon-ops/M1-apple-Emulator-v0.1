@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+    branches: [main]
 
 permissions:
   contents: read
@@ -17,13 +18,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Validate target, fidelity, Linux milestone, scope, licensing, hardware and all 365 phases
+      - name: Validate target, fidelity, Linux milestone, scope, licensing, branch policy, hardware and all 365 phases
         run: |
           python3 tools/validate_target.py
           python3 tools/validate_fidelity.py
           python3 tools/validate_boot_milestone.py
           python3 tools/validate_scope.py
           python3 tools/validate_licensing.py
+          python3 tools/validate_branch_policy.py
           python3 tools/validate_hardware.py
           python3 tools/validate_roadmap.py
       - name: Unit tests

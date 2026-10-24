@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "phase": "P006",
-  "reviewed_on": "2026-10-23",
-  "baseline_commit": "63606cad4f003d8614481148eba6e837e7faf283",
+  "reviewed_on": "2026-10-24",
+  "baseline_commit": "c0e6acf6246f7acf13bdc566900b3d64b21cd15c",
   "project_license": {
     "spdx": "MIT",
     "notice": "LICENSE",
@@ -12,6 +12,7 @@
     ".github/workflows/verify.yml",
     ".gitignore",
     "AGENTS.md",
+    "CONTRIBUTING.md",
     "LICENSE",
     "README.md",
     "ROADMAP_365_PHASES.md",
@@ -31,6 +32,7 @@
     "docs/phases/P004.md",
     "docs/phases/P005.md",
     "docs/phases/P006.md",
+    "docs/phases/P007.md",
     "docs/scope.json",
     "experiments/arm64-virt-smoke/Makefile",
     "experiments/arm64-virt-smoke/hello.S",
@@ -40,6 +42,7 @@
     "hardware/t8103.json",
     "tests/test_arm64_smoke.py",
     "tests/test_boot_milestone.py",
+    "tests/test_branch_policy.py",
     "tests/test_fidelity.py",
     "tests/test_g4_transcript.py",
     "tests/test_licensing.py",
@@ -51,6 +54,7 @@
     "tools/run_arm64_smoke.py",
     "tools/setup_qemu.sh",
     "tools/validate_boot_milestone.py",
+    "tools/validate_branch_policy.py",
     "tools/validate_fidelity.py",
     "tools/validate_hardware.py",
     "tools/validate_licensing.py",
@@ -78,7 +82,8 @@
         ".github/workflows/verify.yml",
         "docs/DEVELOPMENT.md",
         "tools/setup_qemu.sh",
-        "tools/run_arm64_smoke.py"
+        "tools/run_arm64_smoke.py",
+        "CONTRIBUTING.md"
       ]
     },
     {
@@ -93,7 +98,8 @@
       "use_sites": [
         ".github/workflows/verify.yml",
         "docs/DEVELOPMENT.md",
-        "docs/phases/P005.md"
+        "docs/phases/P005.md",
+        "CONTRIBUTING.md"
       ]
     },
     {
@@ -108,7 +114,10 @@
         ".github/workflows/verify.yml",
         "docs/DEVELOPMENT.md",
         "tools/run_arm64_smoke.py",
-        "tools/validate_licensing.py"
+        "tools/validate_licensing.py",
+        "CONTRIBUTING.md",
+        "tools/validate_branch_policy.py",
+        "tests/test_branch_policy.py"
       ]
     },
     {
@@ -125,7 +134,8 @@
       "use_sites": [
         ".github/workflows/verify.yml",
         "docs/DEVELOPMENT.md",
-        "experiments/arm64-virt-smoke/Makefile"
+        "experiments/arm64-virt-smoke/Makefile",
+        "CONTRIBUTING.md"
       ]
     },
     {
@@ -162,7 +172,10 @@
         "docs/DEVELOPMENT.md",
         "tools/setup_qemu.sh",
         "experiments/linux-boot-witness/probe.sh",
-        "experiments/linux-boot-witness/serial-binding.sh"
+        "experiments/linux-boot-witness/serial-binding.sh",
+        "CONTRIBUTING.md",
+        "tools/validate_branch_policy.py",
+        "tests/test_branch_policy.py"
       ]
     },
     {
@@ -258,7 +271,7 @@
   "review_inputs": [
     {
       "path": ".github/workflows/verify.yml",
-      "sha256": "f9ad5aee1f6100ccd30aa175f8d9338333013c335e10712c96870cb82859e3ab",
+      "sha256": "7a8a00e0d4d4e6e206bbc906bb34f4b999243edc946f8a8f7cbe0c1581848f67",
       "dependencies": [
         "qemu",
         "qemu-firmware",
@@ -270,7 +283,7 @@
     },
     {
       "path": "docs/DEVELOPMENT.md",
-      "sha256": "deca6bc033cb9b6e9e6bec391f2221101515d10066f49896a1c8c0f4821e2feb",
+      "sha256": "8dbfc6472af96aa179d3b33076aea440cdf9b473f0aa63306cbbda33021fbefd",
       "dependencies": [
         "qemu",
         "qemu-firmware",
@@ -320,6 +333,25 @@
       "dependencies": [
         "qemu",
         "qemu-build-dependencies",
+        "host-environment"
+      ]
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "sha256": "1034d2dcea46c0f7e8e599554f511e435bb54d3db4da194e079be037d7f30f59",
+      "dependencies": [
+        "qemu",
+        "qemu-firmware",
+        "python",
+        "gnu-toolchain",
+        "host-environment"
+      ]
+    },
+    {
+      "path": "tools/validate_branch_policy.py",
+      "sha256": "eaacc07432b5dcae014149313e4e6f39148910e6071b22d9139ed3110c9d6119",
+      "dependencies": [
+        "python",
         "host-environment"
       ]
     }

@@ -95,7 +95,7 @@ P005 introduces no hardware address, proprietary asset or new third-party source
 
 ## P006 licensing evidence
 
-Reviewed 2026-10-23. The [licensing and redistribution policy](LICENSING.md) records the current source-only dependency review and the procedures required for future imports and binary releases. Its primary-evidence inventory also covers the declared development tools and CI actions. The [machine-readable inventory](licensing.json) classifies exact project paths, twelve external/reference component groups and seven reviewed declaration/build/runner inputs. This is not a transitive build SBOM or a license grant for referenced material.
+Reviewed 2026-10-23. The [licensing and redistribution policy](LICENSING.md) records the source-only dependency review and the procedures required for future imports and binary releases. Its primary-evidence inventory also covers the declared development tools and CI actions. P006 classified exact project paths, twelve external/reference component groups and seven reviewed declaration/build/runner inputs; P007 extends the current [machine-readable inventory](licensing.json) to nine input surfaces. This is not a transitive build SBOM or a license grant for referenced material.
 
 | Primary evidence | Review result |
 |---|---|
@@ -107,6 +107,22 @@ Reviewed 2026-10-23. The [licensing and redistribution policy](LICENSING.md) rec
 | [Asahi platform introduction](https://github.com/AsahiLinux/docs/blob/0d1f8917fa88745d62a4c05d802c4a7298c8616b/docs/platform/introduction.md), [Apple agreement index](https://www.apple.com/legal/sla/) and [example macOS agreement](https://www.apple.com/legal/sla/docs/macOSTahoe.pdf) | Public access to firmware is not redistribution permission. The project excludes Apple proprietary assets; actual applicable agreements and open-source exceptions must be distinguished. |
 
 The QEMU, Linux and Asahi evidence pins are unchanged from previous phases. All current source files remain project-authored text under the existing MIT grant; no third-party source, license text, executable, guest image or proprietary firmware is newly bundled. Primary-source links support the review and do not complete P017's immutable build pin, later guest preparation or a runtime gate.
+
+## P007 contribution workflow evidence
+
+Reviewed 2026-10-24 against the official Git command manuals and GitHub documentation below. These are live command/service references, not a new toolchain version pin. The policy is an original project decision derived from their documented behavior; it does not require auxiliary branches, configure GitHub protection or certify runtime fidelity.
+
+| Primary source | Consequence for this project |
+|---|---|
+| [git-add](https://git-scm.com/docs/git-add), [git-diff](https://git-scm.com/docs/git-diff), [git-write-tree](https://git-scm.com/docs/git-write-tree) | Stage selected paths explicitly, review the index and record its immutable tree object before testing. Working files and the index are separate states. |
+| [git-archive](https://git-scm.com/docs/git-archive) | Export attributes can affect contents. Compare every exported path, blob and executable bit with the selected tree before trusting tests of the export. |
+| [git-commit](https://git-scm.com/docs/git-commit) | A plain commit uses the index, while automatic staging/file arguments and hooks can affect contents. Verify the resulting immutable commit's parent and tree before publication. |
+| [git-merge](https://git-scm.com/docs/git-merge), [git-push](https://git-scm.com/docs/git-push) | Normal synchronization uses fast-forward-only merging. An explicit commit-to-main refspec and ordinary non-forced push preserve remote concurrency checks; divergence requires integration review and retesting. |
+| [Git optional locks](https://git-scm.com/docs/git#Documentation/git.txt---no-optional-locks), [git-rev-parse](https://git-scm.com/docs/git-rev-parse) | The checkout guard disables optional index refreshes and resolves operation-state paths correctly for both ordinary and linked worktrees. |
+| [GitHub workflow events](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows), [workflow run logs](https://docs.github.com/en/actions/how-tos/monitor-workflows/use-workflow-run-logs) | Inspect both required jobs and their logs for the exact push SHA. Push verification happens after publication; a detached pull-request merge run does not replace it. |
+| [GitHub protected branches](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches) | Required PR reviews and status protection are server configuration, separate from this workflow. The documented direct-main procedure does not require PRs or weaken existing access controls. |
+
+The executable guard, tests and contribution snippets use Python's standard library and already-declared external Git/host tools. No third-party implementation is imported. See the [contribution procedure](../CONTRIBUTING.md) and [P007 report](phases/P007.md) for the exact scope and observed checks.
 
 ## Other development references
 

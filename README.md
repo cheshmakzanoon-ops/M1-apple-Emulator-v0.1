@@ -31,11 +31,12 @@ Cycle-accurate Firestorm simulation, fully functioning Apple AGX graphics, and u
 - [Hardware reference register](hardware/t8103.json) — sourced addresses, uncertainty, and schema-validated data.
 - [Reference material](docs/REFERENCES.md) — authoritative upstream projects and publications.
 - [Local development](docs/DEVELOPMENT.md) — Windows/WSL2/Linux setup and current smoke tests.
-- [Contribution contract](AGENTS.md) — rules to keep changes measurable and reproducible.
+- [Contributing on main](CONTRIBUTING.md) — review, test the exact staged tree and publish a verified commit without auxiliary branches or required pull requests.
+- [Engineering contract](AGENTS.md) — rules to keep changes measurable and reproducible.
 
-## Verify target, fidelity, Linux milestone, scope and licensing contracts
+## Verify target, fidelity, Linux milestone, scope, licensing and branch contracts
 
-Validate the target declarations, fidelity definitions, Linux witness contract, exploratory scope, source licensing inventory and planning metadata with Python 3.11+, Git and a POSIX host shell:
+Validate the target declarations, fidelity definitions, Linux witness contract, exploratory scope, source licensing inventory, contribution policy and planning metadata with Python 3.11+, Git and a POSIX host shell:
 
 ```sh
 python3 tools/validate_target.py
@@ -43,6 +44,7 @@ python3 tools/validate_fidelity.py
 python3 tools/validate_boot_milestone.py
 python3 tools/validate_scope.py
 python3 tools/validate_licensing.py
+python3 tools/validate_branch_policy.py
 python3 tools/validate_hardware.py
 python3 tools/validate_roadmap.py
 python3 -m unittest discover -s tests -v

@@ -4,7 +4,7 @@
 
 ## Target and metadata checks
 
-Python 3.11+, Git and a POSIX host shell are sufficient for the P001 target check, P002 fidelity contract, P003 witness contract, P004 scope policy, P006 source licensing review and synthetic regression suite. Run these commands from the repository root:
+Python 3.11+, Git and a POSIX host shell are sufficient for the P001 target check, P002 fidelity contract, P003 witness contract, P004 scope policy, P006 source licensing review, P007 contribution checks and synthetic regression suite. Use the [main contribution workflow](../CONTRIBUTING.md) for review, exact staged-tree verification and publication. Run these commands from the repository root:
 
 ```sh
 python3 tools/validate_target.py
@@ -12,12 +12,13 @@ python3 tools/validate_fidelity.py
 python3 tools/validate_boot_milestone.py
 python3 tools/validate_scope.py
 python3 tools/validate_licensing.py
+python3 tools/validate_branch_policy.py
 python3 tools/validate_hardware.py
 python3 tools/validate_roadmap.py
 python3 -m unittest discover -s tests -v
 ```
 
-The target validator checks the machine-readable identity and exclusions in `hardware/t8103.json` and the ten visible target declarations listed in the [P001 charter](ARCHITECTURE.md#p001-target-charter), including the P003 witness, P004 scope, P005 executor and P006 licensing specifications. It exits nonzero for missing, malformed or conflicting declarations. Its default paths are relative to the script, so invoking it by absolute path also works from another directory. `--root PATH` checks a separate repository snapshot without modifying it. The check is offline and does not inspect a physical Mac or prove device compatibility.
+The target validator checks the machine-readable identity and exclusions in `hardware/t8103.json` and the eleven visible target declarations listed in the [P001 charter](ARCHITECTURE.md#p001-target-charter), including the P003 witness, P004 scope, P005 executor, P006 licensing and P007 contribution specifications. It exits nonzero for missing, malformed or conflicting declarations. Its default paths are relative to the script, so invoking it by absolute path also works from another directory. `--root PATH` checks a separate repository snapshot without modifying it. The check is offline and does not inspect a physical Mac or prove device compatibility.
 
 ## Fidelity policy check
 
@@ -43,11 +44,19 @@ The [scope-check regression suite](../tests/test_scope.py) exercises false capab
 
 ## Source licensing checks
 
-`python3 tools/validate_licensing.py` checks [licensing.json](licensing.json) against the Git working tree, including tracked ignored files and nonignored untracked source. It requires an explicit inventory entry for each source file, preserves the MIT permission notice, rejects conflicting SPDX headers and unreviewed asset/import paths, and checks SHA-256 digests of the seven reviewed dependency declaration/build/runner inputs. Read the [licensing policy](LICENSING.md) before adding files or updating those digests; a new hash is a recorded human review, not automatic permission to copy code.
+`python3 tools/validate_licensing.py` checks [licensing.json](licensing.json) against the Git working tree, including tracked ignored files and nonignored untracked source. It requires an explicit inventory entry for each source file, preserves the MIT permission notice, rejects conflicting SPDX headers and unreviewed asset/import paths, and checks SHA-256 digests of the nine reviewed dependency declaration/build/runner inputs. P007 adds the contribution procedure and local Git guard to the original seven surfaces. Read the [licensing policy](LICENSING.md) before adding files or updating those digests; a new hash is a recorded human review, not automatic permission to copy code.
 
 Use `python3 tools/validate_licensing.py --root /path/to/clean-export --archive` on an extracted source archive. This explicit mode scans every file without Git ignore rules and rejects Git metadata; it needs no Git executable. Run it before compiling or running Python in that export, since generated ELF files and bytecode are outside the source inventory. Default mode requires a Git root and never silently falls back after a Git error. Both modes read working files, not staged blobs; verify the exact staged export or committed tree before publication.
 
 The check is offline and uses the Python standard library. It records the current source-only boundary, not a transitive package SBOM, proof of authorship or approval of future binary releases. Adding a third-party source file, guest image, QEMU binary, ROM, library or container needs the policy's separate provenance and redistribution review.
+
+## Main branch contribution checks
+
+`python3 tools/validate_branch_policy.py` checks the visible contribution contract, links from the README, engineering rules and this guide, common contradictory instructions and unsafe shell examples, and the workflow's explicit main-only push/main-targeted optional pull-request triggers. CI runs this offline mode, which also works in source exports and detached checkouts. The trigger check intentionally accepts the current simple YAML event block; changing that supported form requires reviewing the validator and tests together. No third-party YAML parser is introduced.
+
+`python3 tools/validate_branch_policy.py --checkout` adds a read-only local preflight: an existing attached `main` at the selected Git root, no unresolved index/operation, no unstaged tracked or nonignored untracked files, and a cached `origin/main` that is an ancestor of `HEAD`. Staged changes and unrelated existing refs are allowed. `--root PATH` selects another snapshot or checkout. The guard disables optional index writes, filesystem-monitor hooks and lazy fetching, and stops before an active configured clean/process filter could execute. Unused driver definitions, such as installed Git LFS configuration without matching attributes, are allowed. Use a complete local checkout; unsupported active filters need separate review. The guard never creates branches, changes refs, commits or pushes. Its cached ancestry check cannot prove remote freshness.
+
+The [contribution procedure](../CONTRIBUTING.md) supplies the separate review and exact staged-tree export/test/commit/publish steps. The linter is bounded: it recognizes the published contract and common shell/prose patterns, not arbitrary shell programs or every contradictory sentence. Neither mode certifies that review or tests actually happened, configures remote protection, or awards a runtime gate. Hosted verification must be checked against the exact published commit SHA; a detached pull-request run is not the authoritative push result.
 
 ## Generic ARM64 baseline
 

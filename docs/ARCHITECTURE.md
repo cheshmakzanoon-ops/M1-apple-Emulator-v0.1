@@ -40,7 +40,7 @@ Generic QEMU `virt` remains a toolchain experiment with different peripherals. Q
 
 ### Entrypoint consistency contract
 
-The project overview/setup entrypoints are `README.md`, `ROADMAP_365_PHASES.md`, `AGENTS.md`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/REFERENCES.md`, `docs/LINUX_BOOT_MILESTONE.md`, `docs/EXPLORATORY_SCOPE.md`, `docs/decisions/0001-qemu-tcg.md` and `docs/LICENSING.md`. Each has one visible research-target declaration near the top. `hardware/t8103.json` carries the structured identity, source references and exclusions. P003 adds the witness specification, P004 adds the exploratory scope specification, P005 adds the executor decision and P006 adds licensing boundaries; all ten target declarations are checked.
+The project overview/setup entrypoints are `README.md`, `ROADMAP_365_PHASES.md`, `AGENTS.md`, `CONTRIBUTING.md`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/REFERENCES.md`, `docs/LINUX_BOOT_MILESTONE.md`, `docs/EXPLORATORY_SCOPE.md`, `docs/decisions/0001-qemu-tcg.md` and `docs/LICENSING.md`. Each has one visible research-target declaration near the top. `hardware/t8103.json` carries the structured identity, source references and exclusions. P003 adds the witness specification, P004 adds the exploratory scope specification, P005 adds the executor decision, P006 adds licensing boundaries and P007 adds the contribution workflow; all eleven target declarations are checked.
 
 Run `python3 tools/validate_target.py` to check those declarations against the frozen P001 identity. The check also rejects malformed identity data, a missing source, altered compatible values and incomplete or contradictory exclusions. It reports paths/fields and exits nonzero on failure; CI runs it alongside the existing roadmap, hardware and unit checks. The regression suite mutates the metadata and each entrypoint to verify that failures are detected.
 
@@ -142,6 +142,12 @@ The existing generic smoke runner explicitly selects `-accel tcg` without accele
 The [licensing policy](LICENSING.md) distinguishes independently authored MIT source, external development tools and research references, future QEMU-derived code, and excluded Apple proprietary assets. [licensing.json](licensing.json) lists each reviewed source path and the current direct dependency groups. The offline validator requires exact inventory coverage and unchanged reviewed dependency-input digests, including forced-in ignored files. An exported source tree has a separate strict scan mode.
 
 These checks preserve provenance and redistribution boundaries; they do not implement CPU/device behavior or grant any runtime fidelity classification. No QEMU source/binary, Linux/BusyBox image or Apple firmware is introduced. Future combined emulator releases must retain file-level notices and supply the matching source/build material required by their licenses, with separate library/firmware review. A source-only P006 result cannot approve an unexamined future artifact.
+
+## P007 authoritative branch and tested commits
+
+[CONTRIBUTING.md](../CONTRIBUTING.md) defines one authoritative `main`, review before publication, exact staged-tree verification, immutable-SHA publication and hosted verification for that commit. Routine work requires neither auxiliary branches nor pull requests. Concurrent changes are preserved and integrated through explicit review and retesting; published history is not rewritten.
+
+The offline branch-policy validator checks the contribution contract and current CI trigger form. Its optional local checkout preflight reads Git state without changing it; it is separate from detached CI/source-export validation. These checks do not enforce remote settings, prove that a person reviewed a change or grant any emulation capability. [P007 evidence](phases/P007.md) records the implemented scope and verification results.
 
 ## Scope
 
